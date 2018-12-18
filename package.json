@@ -9,6 +9,10 @@
     "tippy.js": "^3.3.0"
   },
   "devDependencies": {
-    "gulp": "^4.0.0"
+    "del": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-clean-css": "^4.0.0",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-uglify-es": "^1.0.4"
   }
 }
