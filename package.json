@@ -1,0 +1,14 @@
+{
+  "name": "steam-store-tooltip-chrome",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A Chrome extension that shows an informational tooltip when hovering a Steam store link",
+  "author": "Gabriel Schulte <gabrielmdu@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "tippy.js": "^3.3.0"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.0"
+  }
+}
