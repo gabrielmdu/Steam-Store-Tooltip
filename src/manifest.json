@@ -22,7 +22,7 @@
                 "css/steamstoretooltip.css"
             ],
             "js": [
-                "node_modules/tippy.js/dist/tippy.all.min.js",
+                "js/tippy.all.min.js",
                 "js/steamstoretooltip.js"
             ],
             "run_at": "document_idle"
