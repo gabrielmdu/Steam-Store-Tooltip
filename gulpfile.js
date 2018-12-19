@@ -1,14 +1,15 @@
 const { parallel, src, dest } = require('gulp');
-const all = require('gulp-all')
+const all = require('gulp-all');
 const del = require('del');
-const cleancss = require('gulp-clean-css');
+const sass = require('gulp-sass');
+sass.compiler = require('node-sass');
 const htmlmin = require('gulp-htmlmin');
 const uglify = require('gulp-uglify-es').default;
 const jsonminify = require('gulp-jsonminify');
 
 function css() {
-    return src('src/css/*.css')
-        .pipe(cleancss())
+    return src('src/sass/*.scss')
+        .pipe(sass({ outputStyle: 'compressed' }))
         .pipe(dest('dist/css/'));
 }
 
@@ -31,7 +32,7 @@ function rsc() {
             .pipe(dest('dist')),
         src('src/img/*.png')
             .pipe(dest('dist/img'))
-    ])
+    ]);
 }
 
 function vendor() {
@@ -40,7 +41,7 @@ function vendor() {
 }
 
 function clean() {
-    return del('dist/**')
+    return del('dist/**');
 }
 
 exports.build = parallel(css, html, js, rsc);
