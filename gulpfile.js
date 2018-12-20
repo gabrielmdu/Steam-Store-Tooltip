@@ -1,4 +1,4 @@
-const { parallel, src, dest } = require('gulp');
+const { parallel, src, dest, watch } = require('gulp');
 const all = require('gulp-all');
 const del = require('del');
 const sass = require('gulp-sass');
@@ -44,6 +44,14 @@ function clean() {
     return del('dist/**');
 }
 
+function buildWatch() {
+    watch('src/sass/*.scss', css);
+    watch('src/html/*.html', html);
+    watch('src/js/*.js', js);
+    watch(['src/manifest.json', 'src/img/*.png'], rsc);
+}
+
 exports.build = parallel(css, html, js, rsc);
 exports.vendor = vendor;
 exports.clean = clean;
+exports.buildWatch = buildWatch;
