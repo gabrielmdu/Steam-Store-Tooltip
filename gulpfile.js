@@ -6,6 +6,8 @@ sass.compiler = require('node-sass');
 const htmlmin = require('gulp-htmlmin');
 const uglify = require('gulp-uglify-es').default;
 const jsonminify = require('gulp-jsonminify');
+const resizer = require('gulp-images-resizer');
+const rename = require('gulp-rename');
 
 function css() {
     return src('src/sass/*.scss')
@@ -26,13 +28,19 @@ function js() {
 }
 
 function rsc() {
+    sizes = Array.from([128, 48, 32, 16], size => {
+        return src(`src/img/icon128.png`)
+            .pipe(resizer({ width: size }))
+            .pipe(rename(`icon${size}.png`))
+            .pipe(dest('dist/img/'));
+    });
+
     return all([
         src('src/manifest.json')
             .pipe(jsonminify())
-            .pipe(dest('dist')),
-        src('src/img/*.png')
-            .pipe(dest('dist/img'))
-    ]);
+            .pipe(dest('dist'))
+    ],
+        sizes);
 }
 
 function vendor() {
@@ -48,7 +56,7 @@ function buildWatch() {
     watch('src/sass/*.scss', css);
     watch('src/html/*.html', html);
     watch('src/js/*.js', js);
-    watch(['src/manifest.json', 'src/img/*.png'], rsc);
+    watch(['src/manifest.json', 'src/img/icon128.png'], rsc);
 }
 
 exports.build = parallel(css, html, js, rsc);

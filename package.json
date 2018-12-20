@@ -18,7 +18,9 @@
     "gulp": "^4.0.0",
     "gulp-all": "^1.1.0",
     "gulp-htmlmin": "^5.0.1",
+    "gulp-images-resizer": "0.0.5",
     "gulp-jsonminify": "^1.1.0",
+    "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
     "gulp-uglify-es": "^1.0.4",
     "node-sass": "^4.11.0"
