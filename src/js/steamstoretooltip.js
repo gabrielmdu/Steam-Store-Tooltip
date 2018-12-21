@@ -1,4 +1,20 @@
+function createTooltipElement(html) {
+    let template = document.createElement("template");
+    template.innerHTML = html.trim();
+    let divElement = template.content.firstChild;
+
+    return {
+        element: divElement,
+        name: divElement.querySelector(".name"),
+        headerImg: divElement.querySelector(".header-img"),
+        description: divElement.querySelector(".description"),
+        isFree: divElement.querySelector(".is-free"),
+        price: divElement.querySelector(".price")
+    };
+}
+
 function fetchContent(tip, html) {
+    let tipContent = null;
     let appId = /\/app\/(\d*)\?*/g.exec(tip.reference.href)[1];
 
     fetch("https://store.steampowered.com/api/appdetails?appids=" + appId)
@@ -9,14 +25,15 @@ function fetchContent(tip, html) {
 
             // categories / genres / metacritic / platforms / price_overview / release_date / type
 
-            let content =
-                html.replace("@name", gameData.name)
-                    .replace("@description", gameData.short_description)
-                    .replace("@header_img", gameData.header_image);
+            let divElement = createTooltipElement(html);
+            divElement.name.textContent = gameData.name;
+            divElement.description.textContent = gameData.short_description;
+            divElement.headerImg.firstChild.src = gameData.header_image;
 
-            tip.setContent(content);
+            tipContent = divElement.element;
         })
-        .catch(reason => tip.setContent("Error loading store data"));
+        .catch(reason => tipContent = "Error loading store data")
+        .then(() => tip.setContent(tipContent));
 }
 
 function initTooltips(html) {
