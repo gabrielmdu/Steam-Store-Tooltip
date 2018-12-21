@@ -28,19 +28,16 @@ function js() {
 }
 
 function rsc() {
-    sizes = Array.from([128, 48, 32, 16], size => {
-        return src(`src/img/icon128.png`)
+    [128, 48, 32, 16].forEach(size =>
+        src('src/img/icon128.png')
             .pipe(resizer({ width: size }))
             .pipe(rename(`icon${size}.png`))
-            .pipe(dest('dist/img/'));
-    });
+            .pipe(dest('dist/img/'))
+    );
 
-    return all([
-        src('src/manifest.json')
-            .pipe(jsonminify())
-            .pipe(dest('dist'))
-    ],
-        sizes);
+    return src('src/manifest.json')
+        .pipe(jsonminify())
+        .pipe(dest('dist'));
 }
 
 function vendor() {
