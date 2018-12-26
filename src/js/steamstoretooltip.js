@@ -1,16 +1,25 @@
-function createTooltipElement(html) {
-    let template = document.createElement("template");
-    template.innerHTML = html.trim();
-    let divElement = template.content.firstChild;
+class TooltipElement {
+    constructor(html, gameData) {
+        let template = document.createElement("template");
+        template.innerHTML = html.trim();
 
-    return {
-        element: divElement,
-        name: divElement.querySelector(".name"),
-        headerImg: divElement.querySelector(".header-img"),
-        description: divElement.querySelector(".description"),
-        isFree: divElement.querySelector(".is-free"),
-        price: divElement.querySelector(".price")
-    };
+        this.element = template.content.firstChild;
+        this.gameData = gameData;
+
+        this.name = this.element.querySelector(".name");
+        this.headerImg = this.element.querySelector(".header-img");
+        this.description = this.element.querySelector(".description");
+        this.isFree = this.element.querySelector(".is-free");
+        this.price = this.element.querySelector(".price");
+
+        this.setElementContents();
+    }
+
+    setElementContents() {
+        this.name.textContent = this.gameData.name;
+        this.description.textContent = this.gameData.short_description;
+        this.headerImg.firstChild.src = this.gameData.header_image;
+}
 }
 
 function fetchContent(tip, html) {
@@ -25,11 +34,7 @@ function fetchContent(tip, html) {
 
             // categories / genres / metacritic / platforms / price_overview / release_date / type
 
-            let divElement = createTooltipElement(html);
-            divElement.name.textContent = gameData.name;
-            divElement.description.textContent = gameData.short_description;
-            divElement.headerImg.firstChild.src = gameData.header_image;
-
+            let divElement = new TooltipElement(html, gameData);
             tipContent = divElement.element;
         })
         .catch(reason => tipContent = "Error loading store data")
