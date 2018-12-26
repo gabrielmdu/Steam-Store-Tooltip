@@ -44,7 +44,7 @@ function fetchContent(tip, html) {
             let divElement = new TooltipElement(html, gameData);
             tipContent = divElement.element;
         })
-        .catch(reason => tipContent = "Error loading store data")
+        .catch(reason => tipContent = errorText)
         .then(() => tip.setContent(tipContent));
 }
 
@@ -53,7 +53,7 @@ function initTooltips(html) {
 
     tippy(bodyEl, {
         target: "[href*='store.steampowered.com/app']",
-        content: "Loading store details...",
+        content: loadingText,
         theme: "steam-stt",
         interactive: true,
         maxWidth: 500,
