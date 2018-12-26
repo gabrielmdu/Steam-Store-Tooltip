@@ -22,6 +22,13 @@ class TooltipElement {
         this.name.textContent = this.gameData.name;
         this.description.textContent = this.gameData.short_description;
         this.headerImg.firstChild.src = this.gameData.header_image;
+
+        if (this.gameData.is_free) {
+            this.isFree.classList.remove("hidden");
+        } else {
+            this.price.classList.remove("hidden");
+            this.price.textContent = this.gameData.price_overview.final_formatted;
+        }
     }
 }
 

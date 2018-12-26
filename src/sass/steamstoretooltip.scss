@@ -23,10 +23,22 @@ $shadow-color: #ffffff42;
         }
     }
 
-    .name {
+    .top-right {
         justify-content: right;
-        font-size: 17px;
         padding-left: 8px;
+    }
+
+    .name {
+        font-size: 17px;
+    }
+
+    .price {
+        display: inline-block;
+        padding: 3px;
+        color: black;
+        background: #c0ff00;
+        border: 1px solid black;
+        font-size: 16px;
     }
 
     .bottom {
