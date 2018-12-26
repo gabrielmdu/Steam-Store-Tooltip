@@ -1,3 +1,6 @@
+const loadingText = "Loading store details...";
+const errorText = "Error loading store data";
+
 class TooltipElement {
     constructor(html, gameData) {
         let template = document.createElement("template");
@@ -19,10 +22,14 @@ class TooltipElement {
         this.name.textContent = this.gameData.name;
         this.description.textContent = this.gameData.short_description;
         this.headerImg.firstChild.src = this.gameData.header_image;
-}
+    }
 }
 
 function fetchContent(tip, html) {
+    if (tip.popper.innerText !== loadingText &&
+        tip.popper.innerText !== errorText)
+        return;
+
     let tipContent = null;
     let appId = /\/app\/(\d*)\?*/g.exec(tip.reference.href)[1];
 
@@ -51,6 +58,7 @@ function initTooltips(html) {
         interactive: true,
         maxWidth: 500,
         animateFill: false,
+        performance: true,
         onShow: tip => fetchContent(tip, html)
     });
 }
