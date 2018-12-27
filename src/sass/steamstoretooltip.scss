@@ -33,20 +33,39 @@ $slimy-green: #c0ff00;
         font-size: 17px;
     }
 
-    .discounted-price {
-        display: inline-block;
+    .price-wrap {
+        display: inline-flex;
+        flex-direction: row;
         padding: 3px;
-        font-size: 16px;
         border: 1px solid $slimy-green;
     }
 
+    .discounted-price {
+        justify-content: left;
+    }
+
     .price {
-        color: black;
-        background: $slimy-green;
+        display: inline-block;
+        padding: 3px;
+        border: 1px solid;
+        font-size: 18px;
+    }
+
+    .final-price {
+        font-size: 18px;
+    }
+
+    .initial-price {
+        font-size: 12px;
+        text-decoration: line-through;
     }
 
     .discount {
-        color: $slimy-green;
+        justify-content: right;
+        margin: auto 1px auto 4px;
+        color: black;
+        background: $slimy-green;
+        font-size: 25px;
     }
 
     .bottom {
