@@ -60,9 +60,10 @@ $slimy-green: #c0ff00;
         text-decoration: line-through;
     }
 
-    .discount {
+    .percent {
         justify-content: right;
         margin: auto 1px auto 4px;
+        padding: 2px 3px;
         color: black;
         background: $slimy-green;
         font-size: 25px;

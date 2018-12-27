@@ -16,7 +16,7 @@ class TooltipElement {
         this.priceWrap = this.element.querySelector(".price-wrap");
         this.initialPrice = this.element.querySelector(".initial-price");
         this.finalPrice = this.element.querySelector(".final-price");
-        this.discount = this.element.querySelector(".discount");
+        this.percent = this.element.querySelector(".percent");
 
         this.setElementContents();
     }
@@ -32,7 +32,7 @@ class TooltipElement {
             if (this.gameData.price_overview.discount_percent > 0) {
                 this.initialPrice.textContent = this.gameData.price_overview.initial_formatted;
                 this.finalPrice.textContent = this.gameData.price_overview.final_formatted;
-                this.discount.textContent = this.gameData.price_overview.discount_percent + "%";
+                this.percent.textContent = this.gameData.price_overview.discount_percent + "%";
 
                 this.priceWrap.classList.remove("hidden");
                 this.price.classList.add("hidden");
