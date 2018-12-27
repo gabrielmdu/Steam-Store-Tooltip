@@ -1,5 +1,6 @@
-const loadingText = "Loading store details...";
-const errorText = "Error loading store data";
+const name = "Steam Store Tooltip";
+const version = "1.0.0";
+const author = "gabrielmdu";
 
 class TooltipElement {
     constructor(html, gameData) {
@@ -46,9 +47,11 @@ class TooltipElement {
 }
 
 function fetchContent(tip, html) {
-    if (tip.popper.innerText !== loadingText &&
-        tip.popper.innerText !== errorText)
+    if (tip.state.isLoading || tip.state.isLoaded) {
         return;
+    }
+
+    tip.state.isLoading = true;
 
     let tipContent = null;
     let appId = /\/app\/(\d*)\?*/g.exec(tip.reference.href)[1];
@@ -63,8 +66,11 @@ function fetchContent(tip, html) {
 
             let divElement = new TooltipElement(html, gameData);
             tipContent = divElement.element;
+
+            tip.state.isLoading = false;
+            tip.state.isLoaded = true;
         })
-        .catch(reason => tipContent = errorText)
+        .catch(reason => tipContent = "Error loading store data")
         .then(() => tip.setContent(tipContent));
 }
 
@@ -73,7 +79,7 @@ function initTooltips(html) {
 
     tippy(bodyEl, {
         target: "[href*='store.steampowered.com/app']",
-        content: loadingText,
+        content: "Loading store details...",
         theme: "steam-stt",
         interactive: true,
         maxWidth: 500,
@@ -84,9 +90,6 @@ function initTooltips(html) {
 }
 
 function main() {
-    let name = "Steam Store Tooltip";
-    let version = "1.0.0";
-    let author = "gabrielmdu";
     let greyColor = "color: grey;";
     let blackBackground = "background: black;";
 
