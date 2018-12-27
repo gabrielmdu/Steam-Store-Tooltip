@@ -12,8 +12,8 @@ class TooltipElement {
         this.name = this.element.querySelector(".name");
         this.headerImg = this.element.querySelector(".header-img");
         this.description = this.element.querySelector(".description");
-        this.isFree = this.element.querySelector(".is-free");
         this.price = this.element.querySelector(".price");
+        this.discount = this.element.querySelector(".discount");
 
         this.setElementContents();
     }
@@ -24,10 +24,16 @@ class TooltipElement {
         this.headerImg.firstChild.src = this.gameData.header_image;
 
         if (this.gameData.is_free) {
-            this.isFree.classList.remove("hidden");
-        } else {
-            this.price.classList.remove("hidden");
+            this.price.textContent = "FREE";
+        } else if (this.gameData.price_overview) {
             this.price.textContent = this.gameData.price_overview.final_formatted;
+
+            if (this.gameData.price_overview.discount_percent > 0) {
+                this.discount.textContent = this.gameData.price_overview.discount_percent + "%";
+                this.discount.classList.remove("hidden");
+            }
+        } else {
+            this.price.classList.add("hidden");
         }
     }
 }
