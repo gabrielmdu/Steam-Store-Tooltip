@@ -18,6 +18,7 @@ class TooltipElement {
         this.initialPrice = this.element.querySelector(".initial-price");
         this.finalPrice = this.element.querySelector(".final-price");
         this.percent = this.element.querySelector(".percent");
+        this.metacritic = this.element.querySelector(".metacritic");
 
         this.setElementContents();
     }
@@ -42,6 +43,22 @@ class TooltipElement {
             }
         } else {
             this.price.classList.add("hidden");
+        }
+
+        if (this.gameData.metacritic) {
+            this.metacritic.classList.remove("hidden");
+
+            let score = this.gameData.metacritic.score;
+            if (score <= 39) {
+                this.metacritic.classList.add("negative");
+            } else if (score >= 40 && score <= 74) {
+                this.metacritic.classList.add("mixed");
+            } else {
+                this.metacritic.classList.add("positive");
+            }
+
+            this.metacritic.firstChild.textContent = score;
+            this.metacritic.firstChild.href = this.gameData.metacritic.url;
         }
     }
 }

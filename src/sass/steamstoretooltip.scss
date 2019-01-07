@@ -13,14 +13,53 @@ $slimy-green: #c0ff00;
     .top {
         display: flex;
         flex-direction: row;
-        height: 95px;
+        height: 94px;
     }
 
     .header-img {
         justify-content: left;
+        position: relative;
+        flex-basis: 200px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        box-shadow: 1px 1px 1px 1px $shadow-color,
+            1px -1px 1px 1px $shadow-color,
+            -1px -1px 1px 1px $shadow-color,
+            -1px 1px 1px 1px $shadow-color;
 
         img {
-            box-shadow: 1px 1px 1px 1px $shadow-color, 1px -1px 1px 1px $shadow-color, -1px -1px 1px 1px $shadow-color, -1px 1px 1px 1px $shadow-color;
+            width: 100%;
+            height: 100%;
+        }
+
+        .metacritic {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            font: 15px bold Arial, Helvetica, sans-serif;
+            color: #fff;
+            height: 1.9em;
+            width: 1.9em;
+            text-align: center;
+            line-height: 1.9em;
+            border-radius: 6px;
+
+            &.positive {
+                background: #6c3;
+            }
+
+            &.mixed {
+                background: #fc3;
+            }
+
+            &.negative {
+                background: #f00;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: inherit;
+            }
         }
     }
 
