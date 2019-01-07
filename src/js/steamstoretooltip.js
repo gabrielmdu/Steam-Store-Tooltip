@@ -33,7 +33,7 @@ class TooltipElement {
             if (this.gameData.price_overview.discount_percent > 0) {
                 this.initialPrice.textContent = this.gameData.price_overview.initial_formatted;
                 this.finalPrice.textContent = this.gameData.price_overview.final_formatted;
-                this.percent.textContent = this.gameData.price_overview.discount_percent + "%";
+                this.percent.textContent = -this.gameData.price_overview.discount_percent + "%";
 
                 this.priceWrap.classList.remove("hidden");
                 this.price.classList.add("hidden");
