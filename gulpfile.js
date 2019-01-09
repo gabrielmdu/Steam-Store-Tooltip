@@ -35,7 +35,7 @@ function rsc() {
             .pipe(dest('dist/img/'))
     );
 
-    return src('src/manifest.json')
+    return src('src/*.json')
         .pipe(jsonminify())
         .pipe(dest('dist'));
 }
@@ -53,7 +53,7 @@ function buildWatch() {
     watch('src/sass/*.scss', css);
     watch('src/html/*.html', html);
     watch('src/js/*.js', js);
-    watch(['src/manifest.json', 'src/img/icon128.png'], rsc);
+    watch(['src/*.json', 'src/img/icon128.png'], rsc);
 }
 
 exports.build = parallel(css, html, js, rsc);

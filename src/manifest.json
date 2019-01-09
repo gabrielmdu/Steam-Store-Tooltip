@@ -36,7 +36,8 @@
     },
     "options_page": "html/options.html",
     "web_accessible_resources": [
-        "html/steamstoretooltip.html"
+        "html/steamstoretooltip.html",
+        "steam_categories.json"
     ],
     "manifest_version": 2
 }

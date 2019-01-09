@@ -3,52 +3,60 @@ const version = "1.0.0";
 const author = "gabrielmdu";
 
 class TooltipElement {
-    constructor(html, gameData) {
+    constructor(html, gameData, steamCategories) {
         let template = document.createElement("template");
         template.innerHTML = html.trim();
 
         this.element = template.content.firstChild;
-        this.gameData = gameData;
 
         this.name = this.element.querySelector(".name");
         this.headerImg = this.element.querySelector(".header-img");
         this.description = this.element.querySelector(".description");
         this.price = this.element.querySelector(".price");
-        this.priceWrap = this.element.querySelector(".price-wrap");
+        this.priceWrapper = this.element.querySelector(".price-wrapper");
         this.initialPrice = this.element.querySelector(".initial-price");
         this.finalPrice = this.element.querySelector(".final-price");
         this.percent = this.element.querySelector(".percent");
         this.metacritic = this.element.querySelector(".metacritic");
+        this.categories = this.element.querySelector(".categories");
 
-        this.setElementContents();
+        this.setElementContents(gameData, steamCategories);
     }
 
-    setElementContents() {
-        this.name.textContent = this.gameData.name;
-        this.description.innerHTML = this.gameData.short_description;
-        this.headerImg.firstChild.src = this.gameData.header_image;
+    setElementContents(gameData, steamCategories) {
+        this.name.textContent = gameData.name;
+        this.description.innerHTML = gameData.short_description;
+        this.headerImg.firstChild.src = gameData.header_image;
 
-        if (this.gameData.is_free) {
+        this.setPriceContent(gameData.is_free, gameData.price_overview);
+        this.setMetacriticContent(gameData.metacritic);
+        this.setCategoriesContent(steamCategories, gameData.categories);
+    }
+
+    setPriceContent(isFree, priceOverview) {
+        if (isFree) {
             this.price.textContent = "FREE";
-        } else if (this.gameData.price_overview) {
-            if (this.gameData.price_overview.discount_percent > 0) {
-                this.initialPrice.textContent = this.gameData.price_overview.initial_formatted;
-                this.finalPrice.textContent = this.gameData.price_overview.final_formatted;
-                this.percent.textContent = -this.gameData.price_overview.discount_percent + "%";
+        } else if (priceOverview) {
+            if (priceOverview.discount_percent > 0) {
+                this.initialPrice.textContent = priceOverview.initial_formatted;
+                this.finalPrice.textContent = priceOverview.final_formatted;
+                this.percent.textContent = -priceOverview.discount_percent + "%";
 
-                this.priceWrap.classList.remove("hidden");
+                this.priceWrapper.classList.remove("hidden");
                 this.price.classList.add("hidden");
             } else {
-                this.price.textContent = this.gameData.price_overview.final_formatted;
+                this.price.textContent = priceOverview.final_formatted;
             }
         } else {
             this.price.classList.add("hidden");
         }
+    }
 
-        if (this.gameData.metacritic) {
+    setMetacriticContent(metacritic) {
+        if (metacritic) {
             this.metacritic.classList.remove("hidden");
 
-            let score = this.gameData.metacritic.score;
+            let score = metacritic.score;
             if (score <= 39) {
                 this.metacritic.classList.add("negative");
             } else if (score >= 40 && score <= 74) {
@@ -58,12 +66,28 @@ class TooltipElement {
             }
 
             this.metacritic.firstChild.textContent = score;
-            this.metacritic.firstChild.href = this.gameData.metacritic.url;
+            this.metacritic.firstChild.href = metacritic.url;
         }
+    }
+
+    setCategoriesContent(steamCategories, categoriesData) {
+        categoriesData.forEach(cat => {
+            let steamCategory = steamCategories.find(sCat => cat.id == sCat.id);
+
+            let catEl = document.createElement("div");
+            catEl.classList.add("category");
+            catEl.setAttribute("title", cat.description);
+
+            let catImg = new Image(26, 16);
+            catImg.src = steamCategory.img;
+            catEl.appendChild(catImg);
+
+            this.categories.appendChild(catEl);
+        });
     }
 }
 
-function fetchContent(tip, html) {
+function fetchContent(tip, html, steamCategories) {
     if (tip.state.isLoading || tip.state.isLoaded) {
         return;
     }
@@ -79,9 +103,9 @@ function fetchContent(tip, html) {
             console.log(data);
             let gameData = data[appId].data;
 
-            // categories / genres / metacritic / platforms / price_overview / release_date / type
+            // categories / genres / platforms / release_date
 
-            let divElement = new TooltipElement(html, gameData);
+            let divElement = new TooltipElement(html, gameData, steamCategories);
             tipContent = divElement.element;
 
             tip.state.isLoading = false;
@@ -91,7 +115,7 @@ function fetchContent(tip, html) {
         .then(() => tip.setContent(tipContent));
 }
 
-function initTooltips(html) {
+function initTooltips(html, steamCategories) {
     let bodyEl = document.getElementsByTagName("body")[0];
 
     tippy(bodyEl, {
@@ -102,7 +126,7 @@ function initTooltips(html) {
         maxWidth: 500,
         animateFill: false,
         performance: true,
-        onShow: tip => fetchContent(tip, html)
+        onShow: tip => fetchContent(tip, html, steamCategories)
     });
 }
 
@@ -121,9 +145,20 @@ function main() {
         author,
         greyColor + blackBackground);
 
+    let sstHtml;
+    let steamCategories;
+
     fetch(chrome.extension.getURL("/html/steamstoretooltip.html"))
         .then(response => response.text())
-        .then(initTooltips)
+        .then(response => {
+            sstHtml = response;
+            return fetch(chrome.extension.getURL("/steam_categories.json"));
+        })
+        .then(response => response.json())
+        .then(response => {
+            steamCategories = response;
+            initTooltips(sstHtml, steamCategories);
+        })
         .catch(reason => console.error("[ERROR] " + reason));
 }
 

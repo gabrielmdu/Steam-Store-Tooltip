@@ -13,7 +13,7 @@ $slimy-green: #c0ff00;
     .top {
         display: flex;
         flex-direction: row;
-        height: 94px;
+        min-height: 94px;
     }
 
     .header-img {
@@ -22,6 +22,7 @@ $slimy-green: #c0ff00;
         flex-basis: 200px;
         flex-grow: 0;
         flex-shrink: 0;
+        height: 94px;
         box-shadow: 1px 1px 1px 1px $shadow-color,
             1px -1px 1px 1px $shadow-color,
             -1px -1px 1px 1px $shadow-color,
@@ -72,7 +73,7 @@ $slimy-green: #c0ff00;
         font-size: 17px;
     }
 
-    .price-wrap {
+    .price-wrapper {
         display: inline-flex;
         flex-direction: row;
         padding: 3px;
@@ -107,6 +108,21 @@ $slimy-green: #c0ff00;
         background: $slimy-green;
         font-size: 25px;
     }
+
+    .categories-wrapper {
+        margin-top: 3px;
+
+        .categories {
+            border: 1px solid;
+            display: inline-block;
+            padding: 2px;
+
+            .category {
+                display: inherit;
+            }
+        }
+    }
+
 
     .bottom {
         padding-top: 9px;
