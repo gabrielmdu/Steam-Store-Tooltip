@@ -1,11 +1,12 @@
 $shadow-color: #ffffff42;
 $slimy-green: #c0ff00;
+$whity: #e2e2e2;
 
 .tippy-tooltip.steam-stt-theme {
     text-align: left;
     padding: 6px 6px;
     font: 14px Helvetica, sans-serif;
-    color: #eaeaea;
+    color: $whity;
     background: linear-gradient(to bottom, #15324b 0%, #09121a 100%);
     border-radius: 0 !important;
     box-shadow: 2px 2px 8px 1px black;
@@ -113,16 +114,17 @@ $slimy-green: #c0ff00;
         margin-top: 3px;
 
         .categories {
-            border: 1px solid;
             display: inline-block;
-            padding: 2px;
+            padding: 3px 2px 1px 2px;
+            background: $whity;
+            border-radius: 3px;
 
             .category {
                 display: inherit;
+                filter: invert(90%);
             }
         }
     }
-
 
     .bottom {
         padding-top: 9px;

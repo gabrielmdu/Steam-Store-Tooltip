@@ -74,6 +74,10 @@ class TooltipElement {
         categoriesData.forEach(cat => {
             let steamCategory = steamCategories.find(sCat => cat.id == sCat.id);
 
+            if (steamCategory === undefined) {
+                return;
+            }
+
             let catEl = document.createElement("div");
             catEl.classList.add("category");
             catEl.setAttribute("title", cat.description);
