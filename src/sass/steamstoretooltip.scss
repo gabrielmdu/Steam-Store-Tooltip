@@ -1,6 +1,8 @@
 $shadow-color: #ffffff42;
 $slimy-green: #c0ff00;
 $whity: #e2e2e2;
+$blacky: #1b1b1b;
+$img-invert: invert(90%);
 
 .tippy-tooltip.steam-stt-theme {
     text-align: left;
@@ -105,7 +107,7 @@ $whity: #e2e2e2;
         justify-content: right;
         margin: auto 1px auto 4px;
         padding: 2px 3px;
-        color: black;
+        color: $blacky;
         background: $slimy-green;
         font-size: 25px;
     }
@@ -121,7 +123,22 @@ $whity: #e2e2e2;
 
             .category {
                 display: inherit;
-                filter: invert(90%);
+                filter: $img-invert;
+            }
+
+            .category-ellipsis {
+                display: inherit;
+                border-radius: 2px;
+                background: $blacky;
+                vertical-align: top;
+                width: 17px;
+                text-align: center;
+                font-weight: bold;
+                cursor: pointer;
+
+                &::before {
+                    content: "\2026";
+                }
             }
         }
     }
@@ -134,5 +151,23 @@ $whity: #e2e2e2;
 
     .hidden {
         display: none;
+    }
+}
+
+.tippy-tooltip.steam-stt-categories-theme {
+    .categories-list {
+        .categories-list-item {
+            color: $blacky;
+            background: $whity;
+            text-align: left;
+
+            img {
+                filter: $img-invert;
+            }
+        }
+
+        .categories-list-item:not(:first-child) {
+            margin-top: 1px;
+        }
     }
 }

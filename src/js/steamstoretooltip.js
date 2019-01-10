@@ -71,6 +71,9 @@ class TooltipElement {
     }
 
     setCategoriesContent(steamCategories, categoriesData) {
+        let catListEl = document.createElement("div");
+        catListEl.classList.add("categories-list");
+
         categoriesData.forEach(cat => {
             let steamCategory = steamCategories.find(sCat => cat.id == sCat.id);
 
@@ -87,6 +90,28 @@ class TooltipElement {
             catEl.appendChild(catImg);
 
             this.categories.appendChild(catEl);
+
+            let catListItemEl = document.createElement("div");
+            catListItemEl.classList.add("categories-list-item");
+            
+            let catListItemSpanEl = document.createElement("span");
+            catListItemSpanEl.textContent = cat.description;
+            
+            catListItemEl.appendChild(catImg.cloneNode());
+            catListItemEl.appendChild(catListItemSpanEl);
+
+            catListEl.appendChild(catListItemEl);
+        });
+
+        let catEllipsisEl = document.createElement("div");
+        catEllipsisEl.classList.add("category-ellipsis");
+        this.categories.appendChild(catEllipsisEl);
+
+        tippy(catEllipsisEl, {
+            content: catListEl,
+            trigger: "focus",
+            delay: 0,
+            theme: "steam-stt-categories"
         });
     }
 }
