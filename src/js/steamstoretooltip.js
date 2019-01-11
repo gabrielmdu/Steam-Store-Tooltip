@@ -71,33 +71,42 @@ class TooltipElement {
     }
 
     setCategoriesContent(steamCategories, categoriesData) {
+        // categories tooltip element
         let catListEl = document.createElement("div");
         catListEl.classList.add("categories-list");
 
-        categoriesData.forEach(cat => {
+        categoriesData.forEach((cat, index) => {
             let steamCategory = steamCategories.find(sCat => cat.id == sCat.id);
 
             if (steamCategory === undefined) {
                 return;
             }
 
-            let catEl = document.createElement("div");
-            catEl.classList.add("category");
-            catEl.setAttribute("title", cat.description);
+            // limits the number of categories in the main tooltip
+            if (index < 7) {
+                let catEl = document.createElement("div");
+                catEl.classList.add("category");
+                catEl.setAttribute("title", cat.description);
 
-            let catImg = new Image(26, 16);
-            catImg.src = steamCategory.img;
-            catEl.appendChild(catImg);
+                let catImg = new Image(26, 16);
+                catImg.src = steamCategory.img;
+                catEl.appendChild(catImg);
 
-            this.categories.appendChild(catEl);
+                this.categories.appendChild(catEl);
+            }
+
+            // adds categories to tooltip without limit
 
             let catListItemEl = document.createElement("div");
             catListItemEl.classList.add("categories-list-item");
-            
+
             let catListItemSpanEl = document.createElement("span");
             catListItemSpanEl.textContent = cat.description;
-            
-            catListItemEl.appendChild(catImg.cloneNode());
+
+            let catListItemImg = new Image(26, 16);
+            catListItemImg.src = steamCategory.img;
+
+            catListItemEl.appendChild(catListItemImg);
             catListItemEl.appendChild(catListItemSpanEl);
 
             catListEl.appendChild(catListItemEl);
@@ -111,7 +120,9 @@ class TooltipElement {
             content: catListEl,
             trigger: "focus",
             delay: 0,
-            theme: "steam-stt-categories"
+            theme: "steam-stt-categories",
+            animateFill: false,
+            performance: true,
         });
     }
 }

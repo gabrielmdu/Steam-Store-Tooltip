@@ -155,14 +155,27 @@ $img-invert: invert(90%);
 }
 
 .tippy-tooltip.steam-stt-categories-theme {
+    text-align: left;
+    padding: 6px 6px;
+    font: 14px Helvetica, sans-serif;
+    color: $whity;
+    background: #131c27;
+    border-radius: 0 !important;
+    box-shadow: 2px 2px 8px 1px black;
+
     .categories-list {
         .categories-list-item {
-            color: $blacky;
-            background: $whity;
-            text-align: left;
+            padding: 2px 10px 4px 2px;
 
             img {
-                filter: $img-invert;
+                vertical-align: middle;
+            }
+
+            span {
+                vertical-align: middle;
+                border-left: 1px solid;
+                margin-left: 2px;
+                padding-left: 6px;
             }
         }
 
