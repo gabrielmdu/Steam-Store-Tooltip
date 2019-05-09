@@ -1,4 +1,5 @@
-node_modules
 .jshintrc
-package-lock.json
+.vscode
 dist
+node_modules
+package-lock.json

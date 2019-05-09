@@ -1,5 +1,4 @@
-const { parallel, src, dest, watch } = require('gulp');
-const all = require('gulp-all');
+const { parallel, series, src, dest, watch } = require('gulp');
 const del = require('del');
 const sass = require('gulp-sass');
 sass.compiler = require('node-sass');
@@ -8,6 +7,7 @@ const uglify = require('gulp-uglify-es').default;
 const jsonminify = require('gulp-jsonminify');
 const resizer = require('gulp-images-resizer');
 const rename = require('gulp-rename');
+const svg2png = require('gulp-svg2png');
 
 function css() {
     return src('src/sass/*.scss')
@@ -27,14 +27,24 @@ function js() {
         .pipe(dest('dist/js/'));
 }
 
-function rsc() {
-    [128, 48, 32, 16].forEach(size =>
-        src('src/img/icon128.png')
+function rscSvg() {
+    return src('src/img/icon.svg', { allowEmpty: true })
+        .pipe(svg2png({ width: '128' }))
+        .pipe(rename('icon128.png'))
+        .pipe(dest('dist/img/'));
+}
+
+function rscResize(done) {
+    [48, 32, 16].forEach(size =>
+        src('dist/img/icon128.png')
             .pipe(resizer({ width: size }))
             .pipe(rename(`icon${size}.png`))
-            .pipe(dest('dist/img/'))
-    );
+            .pipe(dest('dist/img/')));
+    
+    done();
+}
 
+function rscJson() {
     return src('src/*.json')
         .pipe(jsonminify())
         .pipe(dest('dist'));
@@ -53,10 +63,11 @@ function buildWatch() {
     watch('src/sass/*.scss', css);
     watch('src/html/*.html', html);
     watch('src/js/*.js', js);
-    watch(['src/*.json', 'src/img/icon128.png'], rsc);
+    watch('src/img/icon.svg', series(rscSvg, rscResize));
+    watch('src/*.json', rscJson);
 }
 
-exports.build = parallel(css, html, js, rsc);
+exports.build = parallel(css, html, js, series(rscSvg, rscResize), rscJson);
 exports.vendor = vendor;
 exports.clean = clean;
 exports.buildWatch = buildWatch;

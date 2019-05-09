@@ -11,18 +11,18 @@
     "install": "gulp vendor && gulp build"
   },
   "dependencies": {
-    "tippy.js": "^3.3.0"
+    "tippy.js": "^3.4.1"
   },
   "devDependencies": {
     "del": "^3.0.0",
-    "gulp": "^4.0.0",
-    "gulp-all": "^1.1.0",
+    "gulp": "^4.0.2",
     "gulp-htmlmin": "^5.0.1",
     "gulp-images-resizer": "0.0.5",
     "gulp-jsonminify": "^1.1.0",
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
+    "gulp-svg2png": "^2.0.2",
     "gulp-uglify-es": "^1.0.4",
-    "node-sass": "^4.11.0"
+    "node-sass": "^4.12.0"
   }
 }
