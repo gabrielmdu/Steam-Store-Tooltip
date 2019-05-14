@@ -1,5 +1,7 @@
 chrome.runtime.onInstalled.addListener(function () {
-    chrome.storage.sync.set({ btnColor: '#ff0000' }, function () {
+    chrome.storage.sync.set({
+        btnColor: '#ff0000'
+    }, function () {
         console.log('The color is green.');
     });
     /*
@@ -15,14 +17,16 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.runtime.onMessage.addListener(
-    function (message, callback) {
-        if (message.greeting === 'hello') {
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                chrome.tabs.executeScript(
-                    tabs[0].id,
-                    {
-                        code: 'document.body.style.backgroundColor = "black";'
-                    });
-            });
+    function (request, sender, sendResponse) {
+        if (request.contentScriptQuery == "queryAppId") {
+            var url = "https://store.steampowered.com/api/appdetails?appids=" +
+                encodeURIComponent(request.appId);
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => sendResponse(data))
+                .catch(error => sendResponse(false));
+
+            return true;
         }
     });

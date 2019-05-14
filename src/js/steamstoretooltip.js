@@ -137,22 +137,26 @@ function fetchContent(tip, html, steamCategories) {
     let tipContent = null;
     let appId = /\/app\/(\d*)\?*/g.exec(tip.reference.href)[1];
 
-    fetch("https://store.steampowered.com/api/appdetails?appids=" + appId)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            let gameData = data[appId].data;
+    chrome.runtime.sendMessage({
+            contentScriptQuery: "queryAppId",
+            appId: appId
+        },
+        data => {
+            if (data) {
+                console.log(data);
+                let gameData = data[appId].data;
 
-            // categories / genres / platforms / release_date
+                let divElement = new TooltipElement(html, gameData, steamCategories);
+                tipContent = divElement.element;
 
-            let divElement = new TooltipElement(html, gameData, steamCategories);
-            tipContent = divElement.element;
+                tip.state.isLoading = false;
+                tip.state.isLoaded = true;
+            } else {
+                tipContent = "Erro loading store data.";
+            }
 
-            tip.state.isLoading = false;
-            tip.state.isLoaded = true;
-        })
-        .catch(reason => tipContent = "Error loading store data")
-        .then(() => tip.setContent(tipContent));
+            tip.setContent(tipContent);
+        });
 }
 
 function initTooltips(html, steamCategories) {
