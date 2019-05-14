@@ -148,13 +148,12 @@ function fetchContent(tip, html, steamCategories) {
 
                 let divElement = new TooltipElement(html, gameData, steamCategories);
                 tipContent = divElement.element;
-
-                tip.state.isLoading = false;
-                tip.state.isLoaded = true;
             } else {
-                tipContent = "Erro loading store data.";
+                tipContent = "Error loading store data.";
             }
 
+            tip.state.isLoading = false;
+            tip.state.isLoaded = true;
             tip.setContent(tipContent);
         });
 }
