@@ -11,7 +11,10 @@
 | Extension option: tooltip transparency ||
 | Extension options page ||
 | Show categories | ✔ |
-| Show game screenshots ||
-| Show Metacritic score | ✔ |
-| Show thumbnail, description and price | ✔ |
+| Show genres ||
 | Show if game is wishlisted or owned ||
+| Show Metacritic score | ✔ |
+| Show platforms ||
+| Show release date ||
+| Show screenshots ||
+| Show thumbnail, description and price | ✔ |
