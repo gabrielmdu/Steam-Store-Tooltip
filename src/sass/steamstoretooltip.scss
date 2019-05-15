@@ -65,6 +65,36 @@ $img-invert: invert(90%);
                 text-decoration: inherit;
             }
         }
+
+        .user-data {
+            position: absolute;
+            display: flex;
+            left: 0;
+            top: 10px;
+            height: 20px;
+            padding: 0 4px;
+            box-shadow: 3px 3px 8px 1px #2d2d2d;
+
+            &.owned {
+                background: linear-gradient(to bottom, #0072ff 0%, #124398 100%);
+
+                &::before {
+                    display: flex;
+                    align-items: center;
+                    content: "OWNED"
+                }
+            }
+
+            &.wishlisted {
+                background: linear-gradient(to bottom, #00ce36 0%, #00731f 100%);
+
+                &::before {
+                    display: flex;
+                    align-items: center;
+                    content: "ON WISHLIST"
+                }
+            }
+        }
     }
 
     .top-right {

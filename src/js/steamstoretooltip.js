@@ -3,7 +3,7 @@ const version = "1.0.0";
 const author = "gabrielmdu";
 
 class TooltipElement {
-    constructor(html, gameData, steamCategories) {
+    constructor(html, gameData, userData, steamCategories) {
         let template = document.createElement("template");
         template.innerHTML = html.trim();
 
@@ -18,18 +18,20 @@ class TooltipElement {
         this.finalPrice = this.element.querySelector(".final-price");
         this.percent = this.element.querySelector(".percent");
         this.metacritic = this.element.querySelector(".metacritic");
+        this.userData = this.element.querySelector(".user-data");
         this.categories = this.element.querySelector(".categories");
 
-        this.setElementContents(gameData, steamCategories);
+        this.setElementContents(gameData, userData, steamCategories);
     }
 
-    setElementContents(gameData, steamCategories) {
+    setElementContents(gameData, userData, steamCategories) {
         this.name.textContent = gameData.name;
         this.description.innerHTML = gameData.short_description;
         this.headerImg.firstChild.src = gameData.header_image;
 
         this.setPriceContent(gameData.is_free, gameData.price_overview);
         this.setMetacriticContent(gameData.metacritic);
+        this.setUserDataContent(userData);
         this.setCategoriesContent(steamCategories, gameData.categories);
     }
 
@@ -53,20 +55,36 @@ class TooltipElement {
     }
 
     setMetacriticContent(metacritic) {
-        if (metacritic) {
-            this.metacritic.classList.remove("hidden");
+        if (!metacritic) {
+            return;
+        }
 
-            let score = metacritic.score;
-            if (score <= 39) {
-                this.metacritic.classList.add("negative");
-            } else if (score >= 40 && score <= 74) {
-                this.metacritic.classList.add("mixed");
-            } else {
-                this.metacritic.classList.add("positive");
-            }
+        this.metacritic.classList.remove("hidden");
 
-            this.metacritic.firstChild.textContent = score;
-            this.metacritic.firstChild.href = metacritic.url;
+        let score = metacritic.score;
+        if (score <= 39) {
+            this.metacritic.classList.add("negative");
+        } else if (score >= 40 && score <= 74) {
+            this.metacritic.classList.add("mixed");
+        } else {
+            this.metacritic.classList.add("positive");
+        }
+
+        this.metacritic.firstChild.textContent = score;
+        this.metacritic.firstChild.href = metacritic.url;
+    }
+
+    setUserDataContent(userData) {
+        if (!userData) {
+            return;
+        }
+
+        if (userData.is_owned) {
+            this.userData.classList.remove("hidden");
+            this.userData.classList.add("owned");
+        } else if (userData.added_to_wishlist) {
+            this.userData.classList.remove("hidden");
+            this.userData.classList.add("wishlisted");
         }
     }
 
@@ -142,11 +160,14 @@ function fetchContent(tip, html, steamCategories) {
             appId: appId
         },
         data => {
-            if (data) {
-                console.log(data);
-                let gameData = data[appId].data;
+            if (data.app) {
+                let gameData = data.app[appId].data;
+                let userData = (data.user ? data.user[appId].success : false) ? data.user[appId].data : false;
 
-                let divElement = new TooltipElement(html, gameData, steamCategories);
+                console.log(gameData);
+                console.log(userData);
+
+                let divElement = new TooltipElement(html, gameData, userData, steamCategories);
                 tipContent = divElement.element;
             } else {
                 tipContent = "Error loading store data.";
