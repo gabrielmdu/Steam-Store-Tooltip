@@ -8,11 +8,11 @@ const platformsInfo = {
         imgSrc: "https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_win.png?v=3"
     },
     mac: {
-        title: "Linux",
+        title: "Mac",
         imgSrc: "https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_mac.png"
     },
     linux: {
-        title: "Mac",
+        title: "Linux",
         imgSrc: "https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_linux.png"
     }
 };
