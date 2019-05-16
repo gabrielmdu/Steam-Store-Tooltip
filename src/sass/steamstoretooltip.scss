@@ -112,7 +112,6 @@ $genres-side-border: 1px solid #9c9c9c;
     .additional-info {
         display: flex;
         flex-direction: row;
-        line-height: 13px;
         margin-top: 2px;
         margin-bottom: 5px;
         font-size: 11px;
@@ -121,12 +120,22 @@ $genres-side-border: 1px solid #9c9c9c;
             color: #ffb100;
         }
 
+        .release-date {
+            margin: auto;
+        }
+
         .genres {
             padding: 0 3px;
-            margin: 0 3px;
+            margin: auto 3px;
             border-left: $genres-side-border;
             border-right: $genres-side-border;
             color: #6dffe4;
+        }
+
+        .platforms {
+            display: flex;
+            align-items: center;
+            filter: invert(30%) sepia(41%) hue-rotate(27deg) saturate(7);
         }
     }
 
