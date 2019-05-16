@@ -2,6 +2,21 @@ const name = "Steam Store Tooltip";
 const version = "1.0.0";
 const author = "gabrielmdu";
 
+const platformsInfo = {
+    win: {
+        title: "Windows",
+        imgSrc: "https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_win.png?v=3"
+    },
+    mac: {
+        title: "Linux",
+        imgSrc: "https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_mac.png"
+    },
+    linux: {
+        title: "Mac",
+        imgSrc: "https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_linux.png"
+    }
+};
+
 class TooltipElement {
     constructor(html, gameData, userData, steamCategories) {
         let template = document.createElement("template");
@@ -10,6 +25,9 @@ class TooltipElement {
         this.element = template.content.firstChild;
 
         this.name = this.element.querySelector(".name");
+        this.releaseDate = this.element.querySelector(".release-date");
+        this.genres = this.element.querySelector(".genres");
+        this.platforms = this.element.querySelector(".platforms");
         this.headerImg = this.element.querySelector(".header-img");
         this.description = this.element.querySelector(".description");
         this.price = this.element.querySelector(".price");
@@ -29,10 +47,40 @@ class TooltipElement {
         this.description.innerHTML = gameData.short_description;
         this.headerImg.firstChild.src = gameData.header_image;
 
+        this.setAdditionalContent(gameData.release_date, gameData.genres, gameData.platforms);
         this.setPriceContent(gameData.is_free, gameData.price_overview);
         this.setMetacriticContent(gameData.metacritic);
         this.setUserDataContent(userData);
         this.setCategoriesContent(steamCategories, gameData.categories);
+    }
+
+    setAdditionalContent(releaseDate, genres, platforms) {
+        this.releaseDate.textContent = releaseDate.date;
+
+        let allGenres = genres.map(genre => genre.description);
+        this.genres.title = allGenres.join(", ");
+        this.genres.textContent = allGenres.splice(0, 3).join(", ");
+
+        let supportedPlatforms = [];
+
+        if (platforms.windows) {
+            supportedPlatforms.push(platformsInfo.win);
+        }
+
+        if (platforms.mac) {
+            supportedPlatforms.push(platformsInfo.mac);
+        }
+
+        if (platforms.linux) {
+            supportedPlatforms.push(platformsInfo.linux);
+        }
+
+        supportedPlatforms.forEach(platform => {
+            let platformImg = new Image(13, 13);
+            platformImg.src = platform.imgSrc;
+            platformImg.title = platform.title;
+            this.platforms.appendChild(platformImg);
+        });
     }
 
     setPriceContent(isFree, priceOverview) {
