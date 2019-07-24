@@ -1,16 +1,17 @@
 const { parallel, series, src, dest, watch } = require('gulp');
+const concat = require('gulp-concat');
 const del = require('del');
+const htmlmin = require('gulp-htmlmin');
+const jsonminify = require('gulp-jsonminify');
+const rename = require('gulp-rename');
+const resizer = require('gulp-images-resizer');
 const sass = require('gulp-sass');
 sass.compiler = require('node-sass');
-const htmlmin = require('gulp-htmlmin');
-const uglify = require('gulp-uglify-es').default;
-const jsonminify = require('gulp-jsonminify');
-const resizer = require('gulp-images-resizer');
-const rename = require('gulp-rename');
 const svg2png = require('gulp-svg2png');
+const uglify = require('gulp-uglify-es').default;
 
 function css() {
-    return src('src/sass/*.scss')
+    return src('src/sass/steamstoretooltip.scss')
         .pipe(sass({ outputStyle: 'compressed' }))
         .pipe(dest('dist/css/'));
 }
@@ -40,7 +41,7 @@ function rscResize(done) {
             .pipe(resizer({ width: size }))
             .pipe(rename(`icon${size}.png`))
             .pipe(dest('dist/img/')));
-    
+
     done();
 }
 
@@ -51,7 +52,11 @@ function rscJson() {
 }
 
 function vendor() {
-    return src('node_modules/tippy.js/dist/tippy.all.min.js')
+    return src([
+        'node_modules/tippy.js/dist/tippy.all.min.js',
+        'node_modules/@glidejs/glide/dist/glide.min.js'
+    ])
+        .pipe(concat('vendor.js'))
         .pipe(dest('dist/js/'));
 }
 

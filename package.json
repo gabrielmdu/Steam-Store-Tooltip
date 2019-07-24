@@ -11,11 +11,13 @@
     "install": "gulp vendor && gulp build"
   },
   "dependencies": {
+    "@glidejs/glide": "^3.3.0",
     "tippy.js": "^3.4.1"
   },
   "devDependencies": {
     "del": "^3.0.0",
     "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
     "gulp-htmlmin": "^5.0.1",
     "gulp-images-resizer": "0.0.5",
     "gulp-jsonminify": "^1.1.0",

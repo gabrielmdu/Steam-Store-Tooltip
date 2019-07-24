@@ -1,10 +1,18 @@
+// glide
+@import "node_modules/@glidejs/glide/src/assets/sass/glide.core";
+@import "node_modules/@glidejs/glide/src/assets/sass/glide.theme";
+
+@import "carousel.scss";
+
 $shadow-color: #ffffff42;
 $slimy-green: #c0ff00;
 $whity: #e2e2e2;
 $blacky: #1b1b1b;
 $img-invert: invert(90%);
-$img-width: 235px;
-$img-height: 110px;
+$header-img-width: 320px;
+$header-img-height: 150px;
+$steam-thumbnail-width: 600px;
+$steam-thumbnail-height: 337px;
 $genres-side-border: 1px solid #9c9c9c;
 
 .tippy-tooltip.steam-stt-theme {
@@ -19,24 +27,29 @@ $genres-side-border: 1px solid #9c9c9c;
     .top {
         display: flex;
         flex-direction: row;
-        min-height: $img-height;
+        min-height: $header-img-height;
     }
 
     .header-img {
         justify-content: left;
         position: relative;
-        flex-basis: $img-width;
+        flex-basis: $header-img-width;
         flex-grow: 0;
         flex-shrink: 0;
-        height: $img-height;
+        width: $header-img-width;
+        height: $header-img-height;
+        background: $blacky;
         box-shadow: 1px 1px 1px 1px $shadow-color,
             1px -1px 1px 1px $shadow-color,
             -1px -1px 1px 1px $shadow-color,
             -1px 1px 1px 1px $shadow-color;
 
-        img {
+        .carousel-img {
             width: 100%;
             height: 100%;
+            text-align: center;
+            background-position: center;
+            background-size: 100% auto;
         }
 
         .metacritic {
@@ -213,7 +226,7 @@ $genres-side-border: 1px solid #9c9c9c;
     }
 
     .hidden {
-        display: none;
+        display: none !important;
     }
 }
 
