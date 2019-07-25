@@ -14,5 +14,5 @@
 | Show if game is wishlisted or owned | ✔ |
 | Show Metacritic score | ✔ |
 | Show release date, genres and supported platforms | ✔ |
-| Show screenshots ||
+| Show screenshots | ✔ |
 | Show thumbnail, description and price | ✔ |
