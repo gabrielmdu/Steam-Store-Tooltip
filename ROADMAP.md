@@ -5,11 +5,11 @@
 | Feature | Done |
 | :-- | :--: |
 | Extension icon | ✔ |
-| Extension option: activate when key pressed ||
-| Extension option: store language ||
-| Extension option: store region price ||
-| Extension option: tooltip transparency ||
-| Extension options page ||
+| Extension option: activate when key pressed | ✔ |
+| Extension option: store language | ✔ |
+| Extension option: store region price | ✔ |
+| Extension option: auto swap screenshots | ✔ |
+| Extension options page | ✔ |
 | Show categories | ✔ |
 | Show if game is wishlisted or owned | ✔ |
 | Show Metacritic score | ✔ |

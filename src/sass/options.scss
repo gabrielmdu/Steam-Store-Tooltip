@@ -1,0 +1,27 @@
+$link-height: 30px;
+
+body {
+    background: #eaeaea;
+}
+
+#main {
+    background: #fff;
+    max-width: 650px;
+    height: 290px;
+
+    #sli-value {
+        font-size: 0.9rem;
+    }
+
+    sup {
+        top: -0.3em;
+        font-size: 100%;
+    }
+
+    #div-link {
+        height: $link-height;
+        line-height: $link-height;
+        background: #004d6f;
+        z-index: -1;
+    }
+}

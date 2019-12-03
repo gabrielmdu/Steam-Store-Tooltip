@@ -1,21 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html class="h-100">
 
 <head>
-  <style>
-    button {
-      height: 30px;
-      width: 30px;
-      outline: none;
-      margin: 10px;
-    }
-  </style>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Steam Store Tooltip options</title>
+	<link rel="stylesheet" href="/css/vendor-options.css">
+	<link rel="stylesheet" href="/css/options.css">
 </head>
 
-<body>
-  <div id="buttonDiv">
-  </div>
+<body class="h-100">
+	<div class="container h-100">
+		<div id="main" class="pos-center">
+			<div class="grid pos-center">
+				<div class="row flex-justify-center">
+					<div class="cell-4">
+						<div class="pos-center">Autoplay thumbnails</div>
+					</div>
+					<div class="cell-4">
+						<input id='sli-auto' class="thin cycle-marker" data-role="slider" data-min="0" data-max="10"
+							data-accuracy="1">
+					</div>
+					<div class="cell-1">
+						<div id="sli-value" class="pos-center text-right">3</div>
+					</div>
+				</div>
+
+				<div class="row flex-justify-center">
+					<div class="cell-4">
+						<div class="pos-center">Language</div>
+					</div>
+					<div class="cell-5">
+						<select id="sel-language" data-role="select" data-duration="0"></select>
+					</div>
+				</div>
+
+				<div class="row flex-justify-center">
+					<div class="cell-4">
+						<div class="pos-center">
+							Currency
+							<sup class="text-bold" data-role="hint" data-hint-text="Only works if logged out of Steam"
+								data-hint-hide="8000" data-cls-hint="bg-lime fg-white drop-shadow">
+								*
+							</sup>
+						</div>
+					</div>
+					<div class="cell-5">
+						<select id="sel-currency" data-role="select" data-duration="0"></select>
+					</div>
+				</div>
+
+				<div class="row flex-justify-center">
+					<div class="cell-4">
+						<div class="pos-center">Activation key</div>
+					</div>
+					<div class="cell-2">
+						<div class="pos-center">
+							<span id="spa-key">(none)</span>
+						</div>
+					</div>
+					<div class="cell-2">
+						<button id="btn-key" class="button primary outline">Change</button>
+					</div>
+					<div class="cell-1">
+						<button id="btn-clear" class="button alert outline float-right">Clear</button>
+					</div>
+				</div>
+			</div>
+
+			<div id="div-link" class="pos-fixed pos-bottom-center w-100 text-center text-small">
+				<a id="a-link" class="fg-white" target="_blank">
+					Steam Store Tooltip <span id="spa-version"></span>
+				</a>
+			</div>
+		</div>
+	</div>
+	</div>
 </body>
+<script src="/js/vendor-options.js"></script>
+<script src="/js/default_settings.js"></script>
 <script src="/js/options.js"></script>
 
 </html>

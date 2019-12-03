@@ -23,10 +23,12 @@
                 "*://store.steampowered.com/*"
             ],
             "css": [
+                "css/vendor-sst.css",
                 "css/steamstoretooltip.css"
             ],
             "js": [
-                "js/vendor.js",
+                "js/vendor-sst.js",
+                "js/default_settings.js",
                 "js/steamstoretooltip.js"
             ],
             "run_at": "document_idle"

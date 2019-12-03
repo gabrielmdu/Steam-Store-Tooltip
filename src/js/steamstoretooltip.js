@@ -1,10 +1,4 @@
-const extensionInfo = {
-    name: "Steam Store Tooltip",
-    version: "1.0.0",
-    author: "gabrielmdu"
-};
-
-const platformsInfo = {
+const PLATFORMS_INFO = {
     win: {
         title: "Windows",
         imgSrc: "https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_win.png?v=3"
@@ -19,8 +13,8 @@ const platformsInfo = {
     }
 };
 
-const maxCategories = 7;
-const maxScreenshots = 6;
+const MAX_CATEGORIES = 7;
+const MAX_SCREENSHOTS = 6;
 
 class TooltipElement {
     constructor(tip, html, gameData, userData, steamCategories) {
@@ -74,15 +68,15 @@ class TooltipElement {
         let supportedPlatforms = [];
 
         if (platforms.windows) {
-            supportedPlatforms.push(platformsInfo.win);
+            supportedPlatforms.push(PLATFORMS_INFO.win);
         }
 
         if (platforms.mac) {
-            supportedPlatforms.push(platformsInfo.mac);
+            supportedPlatforms.push(PLATFORMS_INFO.mac);
         }
 
         if (platforms.linux) {
-            supportedPlatforms.push(platformsInfo.linux);
+            supportedPlatforms.push(PLATFORMS_INFO.linux);
         }
 
         supportedPlatforms.forEach(platform => {
@@ -159,7 +153,7 @@ class TooltipElement {
             }
 
             // limits the number of categories in the main tooltip
-            if (index < maxCategories) {
+            if (index < MAX_CATEGORIES) {
                 let catEl = document.createElement("div");
                 catEl.classList.add("category");
                 catEl.setAttribute("title", cat.description);
@@ -198,7 +192,7 @@ class TooltipElement {
             delay: 0,
             theme: "steam-stt-categories",
             animateFill: false,
-            performance: true,
+            ignoreAttributes: true,
         });
     }
 
@@ -213,7 +207,7 @@ class TooltipElement {
         let bullets = this.tip.props.content.querySelector(".glide__bullets");
 
         for (let i = 0; i < this.screenshots.length; i++) {
-            if (i === maxScreenshots) {
+            if (i === MAX_SCREENSHOTS) {
                 break;
             }
 
@@ -235,7 +229,7 @@ class TooltipElement {
             bullets.appendChild(bullet);
         }
 
-        new Glide('.glide', { autoplay: 3000 }).mount();
+        new Glide(".glide", { autoplay: defaultSettings.autoplay }).mount();
 
         this.tip.state.isCarouselLoaded = true;
     }
@@ -253,7 +247,9 @@ function fetchContent(tip, html, steamCategories) {
 
     chrome.runtime.sendMessage({
         contentScriptQuery: "queryAppId",
-        appId: appId
+        appId: appId,
+        language: defaultSettings.language,
+        currency: defaultSettings.currency
     },
         data => {
             let tipContent;
@@ -262,9 +258,6 @@ function fetchContent(tip, html, steamCategories) {
             if (data.app) {
                 let gameData = data.app[appId].data;
                 let userData = (data.user ? data.user[appId].success : false) ? data.user[appId].data : false;
-
-                console.log(gameData);
-                console.log(userData);
 
                 ttElement = new TooltipElement(tip, html, gameData, userData, steamCategories);
                 tip.ttElement = ttElement;
@@ -293,8 +286,15 @@ function initTooltips(html, steamCategories) {
         interactive: true,
         maxWidth: 585,
         animateFill: false,
-        performance: true,
-        onShow: tip => fetchContent(tip, html, steamCategories),
+        ignoreAttributes: true,
+        onShow: tip => {
+            if (!defaultSettings.activationKey ||
+                (defaultSettings.activationKey && defaultSettings.activationKey === defaultSettings._keyDown)) {
+                fetchContent(tip, html, steamCategories);
+            } else {
+                return false;
+            }
+        },
         onMount: tip => {
             if (tip.ttElement) {
                 tip.ttElement.setCarouselContent();
@@ -303,36 +303,57 @@ function initTooltips(html, steamCategories) {
     });
 }
 
-function main() {
+function bindOptionsMessage() {
+    chrome.runtime.onMessage.addListener(
+        message => {
+            defaultSettings = { ...defaultSettings, ...message };
+        });
+}
+
+function bindKeyEvents() {
+    window.addEventListener("keydown", evt => {
+        if (defaultSettings._keyDown !== evt.code) {
+            defaultSettings._keyDown = evt.code;
+        }
+    });
+
+    window.addEventListener("keyup", evt => {
+        if (defaultSettings._keyDown === evt.code) {
+            defaultSettings._keyDown = null;
+        }
+    });
+}
+
+async function main() {
     let greyColor = "color: grey;";
     let blackBackground = "background: black;";
 
     console.log("%c[%c%s %c%s %cby %c%s%c]",
         greyColor + blackBackground,
         "color: #1470a1;" + blackBackground,
-        extensionInfo.name,
+        EXTENSION_INFO.name,
         "color: white;" + blackBackground,
-        extensionInfo.version,
+        EXTENSION_INFO.version,
         greyColor + blackBackground,
         "color: orange;" + blackBackground,
-        extensionInfo.author,
+        EXTENSION_INFO.author,
         greyColor + blackBackground);
 
-    let sstHtml;
-    let steamCategories;
+    try {
+        let response = await fetch(chrome.extension.getURL("/html/steamstoretooltip.html"));
+        let sstHtml = await response.text();
 
-    fetch(chrome.extension.getURL("/html/steamstoretooltip.html"))
-        .then(response => response.text())
-        .then(response => {
-            sstHtml = response;
-            return fetch(chrome.extension.getURL("/steam_categories.json"));
-        })
-        .then(response => response.json())
-        .then(response => {
-            steamCategories = response;
-            initTooltips(sstHtml, steamCategories);
-        })
-        .catch(reason => console.error(`[ERROR] ${reason}`));
+        response = await fetch(chrome.extension.getURL("/steam_categories.json"));
+        let steamCategories = await response.json();
+
+        defaultSettings = await fetchAllSettings();
+
+        bindOptionsMessage();
+        bindKeyEvents();
+        initTooltips(sstHtml, steamCategories);
+    } catch (error) {
+        console.error(`Failed to initiate extension: ${error}`);
+    }
 }
 
 main();

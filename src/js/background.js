@@ -1,50 +1,34 @@
-chrome.runtime.onInstalled.addListener(function () {
-    chrome.storage.sync.set({
-        btnColor: '#ff0000'
-    }, function () {
-        console.log('The color is green.');
-    });
-    /*
-    chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-        chrome.declarativeContent.onPageChanged.addRules([{
-            conditions: [new chrome.declarativeContent.PageStateMatcher({
-                pageUrl: { hostEquals: 'developer.chrome.com' },
-            })
-            ],
-            actions: [new chrome.declarativeContent.ShowPageAction()]
-        }]);
-    });*/
-});
+async function requestAppAndUserInfo(appId, language, currency) {
+    let dataInfo = {
+        app: null,
+        user: null
+    };
+
+    let l = language ? `&l=${language}` : "";
+    let cc = currency ? `&cc=${currency}` : "";
+
+    try {
+        let resultApp = await fetch(`https://store.steampowered.com/api/appdetails?appids=${appId}${l}${cc}`);
+        dataInfo.app = await resultApp.json();
+
+        let resultUser = await fetch(`https://store.steampowered.com/api/appuserdetails?appids=${appId}`);
+        dataInfo.user = await resultUser.json();
+    } catch (e) {
+        console.error(e);
+    }
+
+    return dataInfo;
+}
 
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
         if (request.contentScriptQuery == "queryAppId") {
-            let dataInfo = {
-                app: null,
-                user: null
-            };
+            let appId = encodeURIComponent(request.appId);
+            let language = encodeURIComponent(request.language);
+            let currency = encodeURIComponent(request.currency);
 
-            let resultApp = fetch("https://store.steampowered.com/api/appdetails?appids=" +
-                    encodeURIComponent(request.appId))
-                .then(responseApp => responseApp.json())
-                .then(dataApp => dataApp)
-                .catch(error => false);
-
-            let resultUser = fetch("https://store.steampowered.com/api/appuserdetails?appids=" +
-                    encodeURIComponent(request.appId))
-                .then(responseUser => responseUser.json())
-                .then(dataUser => dataUser)
-                .catch(error => false);
-
-            resultApp
-                .then(infoApp => {
-                    dataInfo.app = infoApp;
-                    return resultUser;
-                })
-                .then(infoUser => {
-                    dataInfo.user = infoUser;
-                    sendResponse(dataInfo);
-                });
+            requestAppAndUserInfo(appId, language, currency)
+                .then(dataInfo => sendResponse(dataInfo));
 
             return true;
         }

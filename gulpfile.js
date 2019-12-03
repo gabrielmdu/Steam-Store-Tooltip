@@ -8,10 +8,13 @@ const resizer = require('gulp-images-resizer');
 const sass = require('gulp-sass');
 sass.compiler = require('node-sass');
 const svg2png = require('gulp-svg2png');
-const uglify = require('gulp-uglify-es').default;
+const terser = require('gulp-terser');
 
 function css() {
-    return src('src/sass/steamstoretooltip.scss')
+    return src([
+        'src/sass/steamstoretooltip.scss',
+        'src/sass/options.scss'
+    ])
         .pipe(sass({ outputStyle: 'compressed' }))
         .pipe(dest('dist/css/'));
 }
@@ -24,7 +27,7 @@ function html() {
 
 function js() {
     return src('src/js/*.js')
-        .pipe(uglify())
+        .pipe(terser())
         .pipe(dest('dist/js/'));
 }
 
@@ -51,13 +54,39 @@ function rscJson() {
         .pipe(dest('dist'));
 }
 
-function vendor() {
+function vendorSstJs() {
     return src([
-        'node_modules/tippy.js/dist/tippy.all.min.js',
+        'node_modules/popper.js/dist/umd/popper.min.js',
+        'node_modules/tippy.js/umd/index.all.min.js',
         'node_modules/@glidejs/glide/dist/glide.min.js'
     ])
-        .pipe(concat('vendor.js'))
+        .pipe(concat('vendor-sst.js'))
         .pipe(dest('dist/js/'));
+}
+
+function vendorSstCss() {
+    return src([
+        'node_modules/@glidejs/glide/dist/css/glide.core.min.css',
+        'node_modules/@glidejs/glide/dist/css/glide.theme.min.css'
+    ])
+        .pipe(concat('vendor-sst.css'))
+        .pipe(dest('dist/css/'));
+}
+
+function vendorOptionsJs() {
+    return src([
+        'node_modules/metro4-dist/js/metro.min.js'
+    ])
+        .pipe(concat('vendor-options.js'))
+        .pipe(dest('dist/js/'));
+}
+
+function vendorOptionsCss() {
+    return src([
+        'node_modules/metro4-dist/css/metro-all.min.css'
+    ])
+        .pipe(concat('vendor-options.css'))
+        .pipe(dest('dist/css/'));
 }
 
 function clean() {
@@ -73,6 +102,6 @@ function buildWatch() {
 }
 
 exports.build = parallel(css, html, js, series(rscSvg, rscResize), rscJson);
-exports.vendor = vendor;
+exports.vendor = parallel(vendorSstJs, vendorSstCss, vendorOptionsJs, vendorOptionsCss);
 exports.clean = clean;
 exports.buildWatch = buildWatch;
