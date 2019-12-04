@@ -81,10 +81,10 @@ async function loadOptions() {
 		metroSlider.val(defaultSettings.autoplay / 1000);
 
 		let metroSelectLanguage = $("#sel-language").data("select");
-		metroSelectLanguage.val(defaultSettings.language);
+		metroSelectLanguage.val(defaultSettings.language === null ? "default" : defaultSettings.language);
 
 		let metroSelectCurrency = $("#sel-currency").data("select");
-		metroSelectCurrency.val(defaultSettings.currency);
+		metroSelectCurrency.val(defaultSettings.currency === null ? "default" : defaultSettings.currency);
 
 		let spaKey = document.querySelector("#spa-key");
 		spaKey.innerHTML = defaultSettings.activationKey ?
@@ -95,6 +95,13 @@ async function loadOptions() {
 }
 
 function fillAndBindSelect(element, options, settingName) {
+	// creates the default option
+	let defaultOpt = document.createElement("option");
+	defaultOpt.value = "default";
+	defaultOpt.text = "Default";
+
+	element.appendChild(defaultOpt);
+
 	for (const option in options) {
 		let opt = document.createElement("option");
 		opt.value = option;
@@ -105,8 +112,9 @@ function fillAndBindSelect(element, options, settingName) {
 
 	let metroSelect = $(element).data("select");
 	metroSelect.options.onItemSelect = value => {
-		chrome.storage.sync.set({ [settingName]: value });
-		sendOptionMessage({ [settingName]: value });
+		let setValue = value === "default" ? null : value;
+		chrome.storage.sync.set({ [settingName]: setValue });
+		sendOptionMessage({ [settingName]: setValue });
 	};
 	metroSelect.reset();
 }
