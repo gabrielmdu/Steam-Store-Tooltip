@@ -188,7 +188,6 @@ class TooltipElement {
 
         tippy(catEllipsisEl, {
             content: catListEl,
-            trigger: "focus",
             delay: 0,
             theme: "steam-stt-categories",
             animateFill: false,
