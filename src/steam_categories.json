@@ -118,5 +118,29 @@
     {
         "id": 40,
         "img": "https://steamstore-a.akamaihd.net/public/images/v6/ico/ico_collectibles.png"
+    },
+    {
+        "id": 41,
+        "img": "https://steamstore-a.akamaihd.net/public/images/v6/ico/ico_remote_play.png"
+    },
+    {
+        "id": 42,
+        "img": "https://steamstore-a.akamaihd.net/public/images/v6/ico/ico_remote_play.png"
+    },
+    {
+        "id": 43,
+        "img": "https://steamstore-a.akamaihd.net/public/images/v6/ico/ico_remote_play.png"
+    },
+    {
+        "id": 44,
+        "img": "https://steamstore-a.akamaihd.net/public/images/v6/ico/ico_remote_play_together.png"
+    },
+    {
+        "id": 47,
+        "img": "https://steamstore-a.akamaihd.net/public/images/v6/ico/ico_multiPlayer.png"
+    },
+    {
+        "id": 48,
+        "img": "https://steamstore-a.akamaihd.net/public/images/v6/ico/ico_coop.png"
     }
 ]
