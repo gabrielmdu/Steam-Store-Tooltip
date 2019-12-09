@@ -1,9 +1,11 @@
 const { parallel, series, src, dest, watch } = require('gulp');
 const concat = require('gulp-concat');
 const del = require('del');
+const fonts = require('gulp-google-webfonts');
 const htmlmin = require('gulp-htmlmin');
 const jsonminify = require('gulp-jsonminify');
 const rename = require('gulp-rename');
+const replace = require('gulp-replace');
 const resizer = require('gulp-images-resizer');
 const sass = require('gulp-sass');
 sass.compiler = require('node-sass');
@@ -73,6 +75,19 @@ function vendorSstCss() {
         .pipe(dest('dist/css/'));
 }
 
+function vendorSstFontCreate() {
+    return src('src/fonts.list')
+        .pipe(fonts())
+        .pipe(dest('dist/font/'));
+}
+
+function vendorSstFontCompress() {
+    return src('dist/font/fonts.css')
+        .pipe(replace('url(', "url(chrome-extension://__MSG_@@extension_id__/font/"))
+        .pipe(sass({ outputStyle: 'compressed' }))
+        .pipe(dest('dist/font/'));
+}
+
 function vendorOptionsJs() {
     return src([
         'node_modules/metro4-dist/js/metro.min.js'
@@ -102,6 +117,6 @@ function buildWatch() {
 }
 
 exports.build = parallel(css, html, js, series(rscSvg, rscResize), rscJson);
-exports.vendor = parallel(vendorSstJs, vendorSstCss, vendorOptionsJs, vendorOptionsCss);
+exports.vendor = parallel(vendorSstJs, vendorSstCss, series(vendorSstFontCreate, vendorSstFontCompress), vendorOptionsJs, vendorOptionsCss);
 exports.clean = clean;
 exports.buildWatch = buildWatch;

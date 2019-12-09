@@ -15,7 +15,7 @@ $genres-side-border: 1px solid #9c9c9c;
 .tippy-tooltip.steam-stt-theme {
     text-align: left;
     padding: 6px 6px;
-    font: 14px Helvetica, sans-serif;
+    font: 14px Cabin, sans-serif;
     color: $whity;
     background: linear-gradient(to bottom, #15324b 0%, #09121a 100%);
     border-radius: 0 !important;
@@ -116,7 +116,7 @@ $genres-side-border: 1px solid #9c9c9c;
     }
 
     .name {
-        font-size: 17px;
+        font: 18px Raleway, sans-serif;
     }
 
     .additional-info {
@@ -186,6 +186,7 @@ $genres-side-border: 1px solid #9c9c9c;
     }
 
     .categories-wrapper {
+        font-family: Helvetica, sans-serif;
         margin-top: 3px;
 
         .categories {
@@ -217,7 +218,7 @@ $genres-side-border: 1px solid #9c9c9c;
     }
 
     .bottom {
-        padding-top: 9px;
+        margin-top: 7px;
         overflow-y: auto;
         max-height: 62px;
     }
@@ -256,7 +257,7 @@ $genres-side-border: 1px solid #9c9c9c;
 .tippy-tooltip.steam-stt-categories-theme {
     text-align: left;
     padding: 6px 6px;
-    font: 14px Helvetica, sans-serif;
+    font: 14px Cabin, sans-serif;
     color: $whity;
     background: #131c27;
     border-radius: 0 !important;
