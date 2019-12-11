@@ -16,3 +16,10 @@
 | Show release date, genres and supported platforms | ✔ |
 | Show screenshots | ✔ |
 | Show thumbnail, description and price | ✔ |
+
+## Future
+
+- Show _/bundle_, _/sale_ and the like
+- Show VR information
+- Show microtrailers
+- Themeable tooltip
