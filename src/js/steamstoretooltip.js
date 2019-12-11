@@ -336,7 +336,7 @@ function bindKeyEvents() {
     });
 }
 
-async function main() {
+function logConsoleExtensionInfo() {
     let greyColor = "color: grey;";
     let blackBackground = "background: black;";
 
@@ -350,7 +350,9 @@ async function main() {
         "color: orange;" + blackBackground,
         EXTENSION_INFO.author,
         greyColor + blackBackground);
+}
 
+async function main() {
     try {
         let response = await fetch(chrome.extension.getURL("/html/steamstoretooltip.html"));
         let sstHtml = await response.text();
