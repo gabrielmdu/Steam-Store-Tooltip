@@ -17,8 +17,10 @@ A Chrome extension that shows an informational tooltip when hovering a [Steam](h
   - categories
   - wishlisted or owned game (_available if you're logged in on the browser_)
   - description
-  - Release date
+  - release date
   - platforms
 - Choose the store language
 - Choose the store currency (_available if you're __not__ logged in on the browser_)
 - Activate the tooltip with a chosen key
+
+[![sst](https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_340x96.png)](https://chrome.google.com/webstore/detail/steam-store-tooltip/loekhehhklndobiamaakjkefleckboon)
