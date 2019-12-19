@@ -234,10 +234,33 @@ class TooltipElement {
     }
 }
 
+function createLoadingWrapper() {
+    let loadingWrapper = document.createElement("div");
+    loadingWrapper.classList.add("loading-wrapper");
+
+    let loadingText = document.createElement("div");
+    loadingText.textContent = "Loading store details...";
+    loadingText.classList.add("inline");
+
+    let loading = document.createElement("div");
+    loading.classList.add("loading");
+    loading.classList.add("inline");
+
+    loadingWrapper.appendChild(loadingText);
+    loadingWrapper.appendChild(loading);
+
+    return loadingWrapper;
+}
+
 function fetchContent(tip, html, steamCategories) {
-    if (tip.state.isLoading || tip.state.isLoaded) {
+    if ((tip.state.isLoading || tip.state.isLoaded) &&
+        tip.originalHref === tip.reference.href) {
         return;
     }
+
+    tip.ttElement = null;
+    tip.setContent(createLoadingWrapper());
+    tip.originalHref = tip.reference.href;
 
     tip.state.isLoading = true;
     tip.state.isCarouselLoaded = false;
@@ -278,22 +301,8 @@ function fetchContent(tip, html, steamCategories) {
 function initTooltips(html, steamCategories) {
     let bodyEl = document.getElementsByTagName("body")[0];
 
-    let loadingWrapper = document.createElement("div");
-
-    let loadingText = document.createElement("div");
-    loadingText.textContent = "Loading store details...";
-    loadingText.classList.add("inline");
-
-    let loading = document.createElement("div");
-    loading.classList.add("loading");
-    loading.classList.add("inline");
-
-    loadingWrapper.appendChild(loadingText);
-    loadingWrapper.appendChild(loading);
-
     tippy(bodyEl, {
         target: "[href*='store.steampowered.com/app']",
-        content: loadingWrapper,
         theme: "steam-stt",
         interactive: true,
         maxWidth: 585,
