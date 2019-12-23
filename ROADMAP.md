@@ -1,5 +1,11 @@
 # Roadmap
 
+## 1.1.0
+
+| Feature | Done |
+| :-- | :--: |
+| Steam reviews data | |
+
 ## 1.0.0
 
 | Feature | Done |
