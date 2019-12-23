@@ -17,7 +17,7 @@ const MAX_CATEGORIES = 7;
 const MAX_SCREENSHOTS = 6;
 
 class TooltipElement {
-    constructor(tip, html, gameData, userData, steamCategories) {
+    constructor(tip, html, gameData, userData, reviewsData, steamCategories) {
         this.tip = tip;
 
         let template = document.createElement("template");
@@ -43,10 +43,10 @@ class TooltipElement {
             categories: this.element.querySelector(".categories")
         };
 
-        this.setElementContents(gameData, userData, steamCategories);
+        this.setElementContents(gameData, userData, reviewsData, steamCategories);
     }
 
-    setElementContents(gameData, userData, steamCategories) {
+    setElementContents(gameData, userData, reviewsData, steamCategories) {
         this.DOM.name.textContent = gameData.name;
         this.DOM.description.innerHTML = gameData.short_description;
         this.DOM.headerImg.querySelector(".carousel-img").style.backgroundImage = `url(${gameData.header_image})`;
@@ -55,6 +55,7 @@ class TooltipElement {
         this.setPriceContent(gameData.is_free, gameData.price_overview);
         this.setMetacriticContent(gameData.metacritic);
         this.setUserDataContent(userData);
+        this.setReviewsDataContent(reviewsData);
         this.setCategoriesContent(steamCategories, gameData.categories);
     }
 
@@ -138,6 +139,10 @@ class TooltipElement {
             this.DOM.userData.classList.remove("hidden");
             this.DOM.userData.classList.add("wishlisted");
         }
+    }
+
+    setReviewsDataContent(reviewsData) {
+        console.log(reviewsData);
     }
 
     setCategoriesContent(steamCategories, categoriesData) {
@@ -279,9 +284,12 @@ function fetchContent(tip, html, steamCategories) {
 
             if (data.app) {
                 let gameData = data.app[appId].data;
-                let userData = (data.user ? data.user[appId].success : false) ? data.user[appId].data : false;
+                let userData = (data.user ? data.user[appId].success : false) ? 
+                    data.user[appId].data : false;
+                let reviewsData = (data.reviews ? data.reviews.success : false) ? 
+                    data.reviews.query_summary : false;
 
-                ttElement = new TooltipElement(tip, html, gameData, userData, steamCategories);
+                ttElement = new TooltipElement(tip, html, gameData, userData, reviewsData, steamCategories);
                 tip.ttElement = ttElement;
                 tipContent = ttElement.element;
             } else {

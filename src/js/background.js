@@ -1,7 +1,8 @@
 async function requestAppAndUserInfo(appId, language, currency) {
     let dataInfo = {
         app: null,
-        user: null
+        user: null,
+        reviews: null
     };
 
     let l = language ? `&l=${language}` : "";
@@ -13,6 +14,9 @@ async function requestAppAndUserInfo(appId, language, currency) {
 
         let resultUser = await fetch(`https://store.steampowered.com/api/appuserdetails?appids=${appId}`);
         dataInfo.user = await resultUser.json();
+
+        let resultReviews = await fetch(`https://store.steampowered.com/appreviews/${appId}?json=1&language=all${l}`);
+        dataInfo.reviews = await resultReviews.json();
     } catch (e) {
         console.error(e);
     }
