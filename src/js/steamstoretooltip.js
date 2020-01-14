@@ -17,7 +17,7 @@ const MAX_CATEGORIES = 7;
 const MAX_SCREENSHOTS = 6;
 
 class TooltipElement {
-    constructor(tip, html, gameData, userData, reviewsData, steamCategories) {
+    constructor(tip, html, gameData, userData, steamImages) {
         this.tip = tip;
 
         let template = document.createElement("template");
@@ -27,26 +27,27 @@ class TooltipElement {
         this.screenshots = gameData.screenshots;
 
         this.DOM = {
-            name: this.element.querySelector(".name"),
-            releaseDate: this.element.querySelector(".release-date"),
-            genres: this.element.querySelector(".genres"),
-            platforms: this.element.querySelector(".platforms"),
-            headerImg: this.element.querySelector(".header-img"),
-            description: this.element.querySelector(".description"),
-            price: this.element.querySelector(".price"),
-            priceWrapper: this.element.querySelector(".price-wrapper"),
-            initialPrice: this.element.querySelector(".initial-price"),
-            finalPrice: this.element.querySelector(".final-price"),
-            percent: this.element.querySelector(".percent"),
-            metacritic: this.element.querySelector(".metacritic"),
-            userData: this.element.querySelector(".user-data"),
-            categories: this.element.querySelector(".categories")
+            name: this.element.querySelector(".steam-stt-theme .name"),
+            releaseDate: this.element.querySelector(".steam-stt-theme .release-date"),
+            genres: this.element.querySelector(".steam-stt-theme .genres"),
+            platforms: this.element.querySelector(".steam-stt-theme .platforms"),
+            headerImg: this.element.querySelector(".steam-stt-theme .header-img"),
+            description: this.element.querySelector(".steam-stt-theme .description"),
+            price: this.element.querySelector(".steam-stt-theme .price"),
+            priceWrapper: this.element.querySelector(".steam-stt-theme .price-wrapper"),
+            initialPrice: this.element.querySelector(".steam-stt-theme .initial-price"),
+            finalPrice: this.element.querySelector(".steam-stt-theme .final-price"),
+            percent: this.element.querySelector(".steam-stt-theme .percent"),
+            metacritic: this.element.querySelector(".steam-stt-theme .metacritic"),
+            userData: this.element.querySelector(".steam-stt-theme .user-data"),
+            categories: this.element.querySelector(".steam-stt-theme .categories"),
+            reviews: this.element.querySelector(".steam-stt-theme .reviews")
         };
 
-        this.setElementContents(gameData, userData, reviewsData, steamCategories);
+        this.setElementContents(gameData, userData, steamImages);
     }
 
-    setElementContents(gameData, userData, reviewsData, steamCategories) {
+    setElementContents(gameData, userData, steamImages) {
         this.DOM.name.textContent = gameData.name;
         this.DOM.description.innerHTML = gameData.short_description;
         this.DOM.headerImg.querySelector(".carousel-img").style.backgroundImage = `url(${gameData.header_image})`;
@@ -55,8 +56,8 @@ class TooltipElement {
         this.setPriceContent(gameData.is_free, gameData.price_overview);
         this.setMetacriticContent(gameData.metacritic);
         this.setUserDataContent(userData);
-        this.setReviewsDataContent(reviewsData);
-        this.setCategoriesContent(steamCategories, gameData.categories);
+        this.setCategoriesContent(steamImages.categories, gameData.categories);
+        this.setReviewsDataContent(steamImages.reviews, gameData.steam_appid, gameData.is_free, gameData.price_overview);
     }
 
     setAdditionalContent(releaseDate, genres, platforms) {
@@ -141,10 +142,6 @@ class TooltipElement {
         }
     }
 
-    setReviewsDataContent(reviewsData) {
-        console.log(reviewsData);
-    }
-
     setCategoriesContent(steamCategories, categoriesData) {
         // categories tooltip element
         let catListEl = document.createElement("div");
@@ -198,6 +195,47 @@ class TooltipElement {
             animateFill: false,
             ignoreAttributes: true,
         });
+    }
+
+    setReviewsDataContent(steamReviews, appId, isFree, priceOverview) {
+        chrome.runtime.sendMessage({
+            contentScriptQuery: "queryReviews",
+            appId: appId,
+            language: defaultSettings.language,
+            purchaseType: isFree ? "all" : "steam"
+        },
+            data => {
+                if (data.query_summary.total_reviews === 0) {
+                    this.DOM.reviews.remove();
+                    return;
+                }
+
+                let ratio = Math.trunc((data.query_summary.total_positive * 100) / data.query_summary.total_reviews);
+                let imgSrc = "";
+
+                let imgName = ratio >= 70 ? "positive"
+                    : ratio < 40 ? "negative" : "mixed";
+
+                imgSrc = steamReviews.find(rev => rev.name === imgName).img;
+
+                this.DOM.reviews.title = `${ratio}% (${data.query_summary.total_positive.toLocaleString()})` +
+                    ` positive reviews from ${data.query_summary.total_reviews.toLocaleString()}`;
+
+                if (!isFree && priceOverview && priceOverview.discount_percent > 0) {
+                    this.DOM.reviews.classList.add("flex-column");
+                }
+
+                let reviewLoading = this.DOM.reviews.querySelector(".loading");
+                reviewLoading.classList.add("hidden");
+
+                let reviewImg = this.DOM.reviews.querySelector("img");
+                reviewImg.classList.remove("hidden");
+                reviewImg.src = imgSrc;
+
+                let reviewRatio = this.DOM.reviews.querySelector("span");
+                reviewRatio.classList.remove("hidden");
+                reviewRatio.textContent = ratio;
+            });
     }
 
     setCarouselContent() {
@@ -257,7 +295,7 @@ function createLoadingWrapper() {
     return loadingWrapper;
 }
 
-function fetchContent(tip, html, steamCategories) {
+function fetchContent(tip, html, steamImages) {
     if ((tip.state.isLoading || tip.state.isLoaded) &&
         tip.originalHref === tip.reference.href) {
         return;
@@ -273,7 +311,7 @@ function fetchContent(tip, html, steamCategories) {
     let appId = /\/app\/(\d*)\?*/g.exec(tip.reference.href)[1];
 
     chrome.runtime.sendMessage({
-        contentScriptQuery: "queryAppId",
+        contentScriptQuery: "queryAppUser",
         appId: appId,
         language: defaultSettings.language,
         currency: defaultSettings.currency
@@ -284,12 +322,10 @@ function fetchContent(tip, html, steamCategories) {
 
             if (data.app) {
                 let gameData = data.app[appId].data;
-                let userData = (data.user ? data.user[appId].success : false) ? 
+                let userData = (data.user ? data.user[appId].success : false) ?
                     data.user[appId].data : false;
-                let reviewsData = (data.reviews ? data.reviews.success : false) ? 
-                    data.reviews.query_summary : false;
 
-                ttElement = new TooltipElement(tip, html, gameData, userData, reviewsData, steamCategories);
+                ttElement = new TooltipElement(tip, html, gameData, userData, steamImages);
                 tip.ttElement = ttElement;
                 tipContent = ttElement.element;
             } else {
@@ -306,7 +342,7 @@ function fetchContent(tip, html, steamCategories) {
         });
 }
 
-function initTooltips(html, steamCategories) {
+function initTooltips(html, steamImages) {
     let bodyEl = document.getElementsByTagName("body")[0];
 
     tippy(bodyEl, {
@@ -319,7 +355,7 @@ function initTooltips(html, steamCategories) {
         onShow: tip => {
             if (!defaultSettings.activationKey ||
                 (defaultSettings.activationKey && defaultSettings.activationKey === defaultSettings._keyDown)) {
-                fetchContent(tip, html, steamCategories);
+                fetchContent(tip, html, steamImages);
             } else {
                 return false;
             }
@@ -374,14 +410,14 @@ async function main() {
         let response = await fetch(chrome.extension.getURL("/html/steamstoretooltip.html"));
         let sstHtml = await response.text();
 
-        response = await fetch(chrome.extension.getURL("/steam_categories.json"));
-        let steamCategories = await response.json();
+        response = await fetch(chrome.extension.getURL("/steam_images.json"));
+        let steamImages = await response.json();
 
         defaultSettings = await fetchAllSettings();
 
         bindOptionsMessage();
         bindKeyEvents();
-        initTooltips(sstHtml, steamCategories);
+        initTooltips(sstHtml, steamImages);
     } catch (error) {
         console.error(`Failed to initiate extension: ${error}`);
     }

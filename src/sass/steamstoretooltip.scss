@@ -149,40 +149,56 @@ $genres-side-border: 1px solid #9c9c9c;
         }
     }
 
-    .price-wrapper {
-        display: inline-flex;
+    .price-reviews-wrapper {
+        display: flex;
         flex-direction: row;
-        padding: 3px;
-        border: 1px solid $slimy-green;
-    }
 
-    .discounted-price {
-        justify-content: left;
-    }
+        .price-wrapper {
+            display: inline-flex;
+            flex-direction: row;
+            padding: 3px;
+            border: 1px solid $slimy-green;
 
-    .price {
-        display: inline-block;
-        padding: 3px;
-        border: 1px solid;
-        font-size: 18px;
-    }
+            .discounted-price {
+                .final-price {
+                    font-size: 18px;
+                }
 
-    .final-price {
-        font-size: 18px;
-    }
+                .initial-price {
+                    font-size: 12px;
+                    text-decoration: line-through;
+                }
+            }
 
-    .initial-price {
-        font-size: 12px;
-        text-decoration: line-through;
-    }
+            .percent {
+                margin: auto 1px auto 4px;
+                padding: 2px 3px;
+                color: $blacky;
+                background: $slimy-green;
+                font-size: 25px;
+            }
+        }
 
-    .percent {
-        justify-content: right;
-        margin: auto 1px auto 4px;
-        padding: 2px 3px;
-        color: $blacky;
-        background: $slimy-green;
-        font-size: 25px;
+        .price {
+            display: inline-block;
+            padding: 3px;
+            border: 1px solid;
+            font-size: 18px;
+        }
+
+        .reviews {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 4px;
+            border-radius: 4px;
+            background: rgba(1, 1, 1, 0.4);
+            padding: 3px;
+
+            * {
+                margin: 0 2px;
+            }
+        }
     }
 
     .categories-wrapper {
@@ -235,6 +251,18 @@ $genres-side-border: 1px solid #9c9c9c;
         animation: rotate3d 1.2s infinite ease-in-out;
     }
 
+    .inline {
+        display: inline-block;
+    }
+
+    .no-margin {
+        margin: 0 !important;
+    }
+
+    .flex-column {
+        flex-direction: column;
+    }
+
     @keyframes rotate3d {
         0% {
             transform: perspective(120px) rotateX(0deg) rotateY(0deg);
@@ -247,10 +275,6 @@ $genres-side-border: 1px solid #9c9c9c;
         100% {
             transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
         }
-    }
-
-    .inline {
-        display: inline-block;
     }
 }
 
