@@ -4,7 +4,7 @@
 
 | Feature | Done |
 | :-- | :--: |
-| Steam reviews data | |
+| Steam reviews data | ✔ |
 
 ## 1.0.0
 
@@ -28,4 +28,5 @@
 - Show _/bundle_, _/sale_ and the like
 - Show VR information
 - Show microtrailers
+- Show ITAD info
 - Themeable tooltip

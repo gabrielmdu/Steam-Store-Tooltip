@@ -15,6 +15,7 @@ A Chrome extension that shows an informational tooltip when hovering a [Steam](h
   - price and discount
   - screenshots
   - categories
+  - reviews positive rating
   - wishlisted or owned game (_available if you're logged in on the browser_)
   - description
   - release date
