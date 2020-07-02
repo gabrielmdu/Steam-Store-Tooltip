@@ -62,6 +62,7 @@ function vendorSstJs() {
         'node_modules/tippy.js/umd/index.all.min.js',
         'node_modules/@glidejs/glide/dist/glide.min.js'
     ])
+        .pipe(terser({ output: { comments: false } }))
         .pipe(concat('vendor-sst.js'))
         .pipe(dest('dist/js/'));
 }
@@ -92,6 +93,7 @@ function vendorOptionsJs() {
     return src([
         'node_modules/metro4-dist/js/metro.min.js'
     ])
+        .pipe(terser({ output: { comments: false } }))
         .pipe(concat('vendor-options.js'))
         .pipe(dest('dist/js/'));
 }
