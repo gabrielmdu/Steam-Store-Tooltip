@@ -1,4 +1,4 @@
-{
+const steamImages = {
     "categories": [
         {
             "id": 1,

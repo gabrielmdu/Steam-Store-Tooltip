@@ -1,4 +1,4 @@
-<div class="steam-stt-theme">
+const sstTemplate = `<div class="steam-stt-theme">
 
     <div class="top">
 
@@ -54,4 +54,4 @@
     <div class="bottom">
         <div class="description"></div>
     </div>
-</div>
+</div>`

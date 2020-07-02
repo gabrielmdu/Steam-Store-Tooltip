@@ -407,17 +407,11 @@ function logConsoleExtensionInfo() {
 
 async function main() {
     try {
-        let response = await fetch(chrome.extension.getURL("/html/steamstoretooltip.html"));
-        let sstHtml = await response.text();
-
-        response = await fetch(chrome.extension.getURL("/steam_images.json"));
-        let steamImages = await response.json();
-
         defaultSettings = await fetchAllSettings();
 
         bindOptionsMessage();
         bindKeyEvents();
-        initTooltips(sstHtml, steamImages);
+        initTooltips(sstTemplate, steamImages);
     } catch (error) {
         console.error(`Failed to initiate extension: ${error}`);
     }

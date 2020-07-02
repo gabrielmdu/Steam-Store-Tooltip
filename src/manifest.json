@@ -27,9 +27,11 @@
             "css/steamstoretooltip.css"
         ],
         "js": [
-            "js/vendor-sst.js",
             "js/default_settings.js",
-            "js/steamstoretooltip.js"
+            "js/sst_template.js",
+            "js/steam_images.js",
+            "js/steamstoretooltip.js",
+            "js/vendor-sst.js"
         ],
         "run_at": "document_idle"
     }],
@@ -41,8 +43,6 @@
     },
     "options_page": "html/options.html",
     "web_accessible_resources": [
-        "html/steamstoretooltip.html",
-        "steam_images.json",
         "font/*.woff"
     ],
     "manifest_version": 2
