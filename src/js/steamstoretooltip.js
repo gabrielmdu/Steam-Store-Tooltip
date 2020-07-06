@@ -2,28 +2,29 @@ class TooltipElement {
     constructor(tip, html, gameData, userData, steamImages) {
         this.tip = tip;
 
-        let template = document.createElement("template");
+        const template = document.createElement('template');
         template.innerHTML = html.trim();
         this.element = template.content.firstChild;
 
         this.screenshots = gameData.screenshots || [];
 
+        const sstTheme = '.steam-stt-theme';
         this.DOM = {
-            name: this.element.querySelector(".steam-stt-theme .name"),
-            releaseDate: this.element.querySelector(".steam-stt-theme .release-date"),
-            genres: this.element.querySelector(".steam-stt-theme .genres"),
-            platforms: this.element.querySelector(".steam-stt-theme .platforms"),
-            headerImg: this.element.querySelector(".steam-stt-theme .header-img"),
-            description: this.element.querySelector(".steam-stt-theme .description"),
-            price: this.element.querySelector(".steam-stt-theme .price"),
-            priceWrapper: this.element.querySelector(".steam-stt-theme .price-wrapper"),
-            initialPrice: this.element.querySelector(".steam-stt-theme .initial-price"),
-            finalPrice: this.element.querySelector(".steam-stt-theme .final-price"),
-            percent: this.element.querySelector(".steam-stt-theme .percent"),
-            metacritic: this.element.querySelector(".steam-stt-theme .metacritic"),
-            userData: this.element.querySelector(".steam-stt-theme .user-data"),
-            categories: this.element.querySelector(".steam-stt-theme .categories"),
-            reviews: this.element.querySelector(".steam-stt-theme .reviews")
+            name: this.element.querySelector(`${sstTheme} .name`),
+            releaseDate: this.element.querySelector(`${sstTheme} .release-date`),
+            genres: this.element.querySelector(`${sstTheme} .genres`),
+            platforms: this.element.querySelector(`${sstTheme} .platforms`),
+            headerImg: this.element.querySelector(`${sstTheme} .header-img`),
+            description: this.element.querySelector(`${sstTheme} .description`),
+            price: this.element.querySelector(`${sstTheme} .price`),
+            priceWrapper: this.element.querySelector(`${sstTheme} .price-wrapper`),
+            initialPrice: this.element.querySelector(`${sstTheme} .initial-price`),
+            finalPrice: this.element.querySelector(`${sstTheme} .final-price`),
+            percent: this.element.querySelector(`${sstTheme} .percent`),
+            metacritic: this.element.querySelector(`${sstTheme} .metacritic`),
+            userData: this.element.querySelector(`${sstTheme} .user-data`),
+            categories: this.element.querySelector(`${sstTheme} .categories`),
+            reviews: this.element.querySelector(`${sstTheme} .reviews`)
         };
 
         this.setElementContents(gameData, userData, steamImages);
@@ -32,7 +33,7 @@ class TooltipElement {
     setElementContents(gameData, userData, steamImages) {
         this.DOM.name.textContent = gameData.name;
         this.DOM.description.innerHTML = gameData.short_description;
-        this.DOM.headerImg.querySelector(".carousel-img").style.backgroundImage = `url(${gameData.header_image})`;
+        this.DOM.headerImg.querySelector('.carousel-img').style.backgroundImage = `url(${gameData.header_image})`;
 
         this.setAdditionalContent(gameData.release_date, gameData.genres, gameData.platforms);
         this.setPriceContent(gameData.is_free, gameData.price_overview);
@@ -45,11 +46,11 @@ class TooltipElement {
     setAdditionalContent(releaseDate, genres, platforms) {
         this.DOM.releaseDate.textContent = releaseDate.date;
 
-        let allGenres = genres.map(genre => genre.description);
-        this.DOM.genres.title = allGenres.join(", ");
-        this.DOM.genres.textContent = allGenres.splice(0, 3).join(", ");
+        const allGenres = genres.map(genre => genre.description);
+        this.DOM.genres.title = allGenres.join(', ');
+        this.DOM.genres.textContent = allGenres.splice(0, 3).join(', ');
 
-        let supportedPlatforms = [];
+        const supportedPlatforms = [];
 
         if (platforms.windows) {
             supportedPlatforms.push(PLATFORMS_INFO.win);
@@ -64,7 +65,7 @@ class TooltipElement {
         }
 
         supportedPlatforms.forEach(platform => {
-            let platformImg = new Image(13, 13);
+            const platformImg = new Image(13, 13);
             platformImg.src = platform.imgSrc;
             platformImg.title = platform.title;
             this.DOM.platforms.appendChild(platformImg);
@@ -73,20 +74,20 @@ class TooltipElement {
 
     setPriceContent(isFree, priceOverview) {
         if (isFree) {
-            this.DOM.price.textContent = "FREE";
+            this.DOM.price.textContent = 'FREE';
         } else if (priceOverview) {
             if (priceOverview.discount_percent > 0) {
                 this.DOM.initialPrice.textContent = priceOverview.initial_formatted;
                 this.DOM.finalPrice.textContent = priceOverview.final_formatted;
                 this.DOM.percent.textContent = `${-priceOverview.discount_percent}%`;
 
-                this.DOM.priceWrapper.classList.remove("hidden");
-                this.DOM.price.classList.add("hidden");
+                this.DOM.priceWrapper.classList.remove('hidden');
+                this.DOM.price.classList.add('hidden');
             } else {
                 this.DOM.price.textContent = priceOverview.final_formatted;
             }
         } else {
-            this.DOM.price.classList.add("hidden");
+            this.DOM.price.classList.add('hidden');
         }
     }
 
@@ -95,15 +96,15 @@ class TooltipElement {
             return;
         }
 
-        this.DOM.metacritic.classList.remove("hidden");
+        this.DOM.metacritic.classList.remove('hidden');
 
-        let score = metacritic.score;
+        const score = metacritic.score;
         if (score <= 39) {
-            this.DOM.metacritic.classList.add("negative");
+            this.DOM.metacritic.classList.add('negative');
         } else if (score >= 40 && score <= 74) {
-            this.DOM.metacritic.classList.add("mixed");
+            this.DOM.metacritic.classList.add('mixed');
         } else {
-            this.DOM.metacritic.classList.add("positive");
+            this.DOM.metacritic.classList.add('positive');
         }
 
         this.DOM.metacritic.firstChild.textContent = score;
@@ -116,21 +117,21 @@ class TooltipElement {
         }
 
         if (userData.is_owned) {
-            this.DOM.userData.classList.remove("hidden");
-            this.DOM.userData.classList.add("owned");
+            this.DOM.userData.classList.remove('hidden');
+            this.DOM.userData.classList.add('owned');
         } else if (userData.added_to_wishlist) {
-            this.DOM.userData.classList.remove("hidden");
-            this.DOM.userData.classList.add("wishlisted");
+            this.DOM.userData.classList.remove('hidden');
+            this.DOM.userData.classList.add('wishlisted');
         }
     }
 
     setCategoriesContent(steamCategories, categoriesData) {
         // categories tooltip element
-        let catListEl = document.createElement("div");
-        catListEl.classList.add("categories-list");
+        const catListEl = document.createElement('div');
+        catListEl.classList.add('categories-list');
 
         categoriesData.forEach((cat, index) => {
-            let steamCategory = steamCategories.find(sCat => cat.id == sCat.id);
+            const steamCategory = steamCategories.find(sCat => cat.id == sCat.id);
 
             if (steamCategory === undefined) {
                 return false;
@@ -138,11 +139,11 @@ class TooltipElement {
 
             // limits the number of categories in the main tooltip
             if (index < MAX_CATEGORIES) {
-                let catEl = document.createElement("div");
-                catEl.classList.add("category");
-                catEl.setAttribute("title", cat.description);
+                const catEl = document.createElement('div');
+                catEl.classList.add('category');
+                catEl.setAttribute('title', cat.description);
 
-                let catImg = new Image(26, 16);
+                const catImg = new Image(26, 16);
                 catImg.src = steamCategory.img;
                 catEl.appendChild(catImg);
 
@@ -151,13 +152,13 @@ class TooltipElement {
 
             // adds categories to tooltip without limit
 
-            let catListItemEl = document.createElement("div");
-            catListItemEl.classList.add("categories-list-item");
+            const catListItemEl = document.createElement('div');
+            catListItemEl.classList.add('categories-list-item');
 
-            let catListItemSpanEl = document.createElement("span");
+            const catListItemSpanEl = document.createElement('span');
             catListItemSpanEl.textContent = cat.description;
 
-            let catListItemImg = new Image(26, 16);
+            const catListItemImg = new Image(26, 16);
             catListItemImg.src = steamCategory.img;
 
             catListItemEl.appendChild(catListItemImg);
@@ -166,14 +167,14 @@ class TooltipElement {
             catListEl.appendChild(catListItemEl);
         });
 
-        let catEllipsisEl = document.createElement("div");
-        catEllipsisEl.classList.add("category-ellipsis");
+        const catEllipsisEl = document.createElement('div');
+        catEllipsisEl.classList.add('category-ellipsis');
         this.DOM.categories.appendChild(catEllipsisEl);
 
         tippy(catEllipsisEl, {
             content: catListEl,
             delay: 0,
-            theme: "steam-stt-categories",
+            theme: 'steam-stt-categories',
             animateFill: false,
             ignoreAttributes: true,
         });
@@ -181,10 +182,10 @@ class TooltipElement {
 
     setReviewsDataContent(steamReviews, appId, isFree, priceOverview) {
         chrome.runtime.sendMessage({
-            contentScriptQuery: "queryReviews",
+            contentScriptQuery: 'queryReviews',
             appId: appId,
             language: defaultSettings.language,
-            purchaseType: isFree ? "all" : "steam"
+            purchaseType: isFree ? 'all' : 'steam'
         },
             data => {
                 if (data.query_summary.total_reviews === 0) {
@@ -192,30 +193,29 @@ class TooltipElement {
                     return;
                 }
 
-                let ratio = Math.trunc((data.query_summary.total_positive * 100) / data.query_summary.total_reviews);
-                let imgSrc = "";
+                const ratio = Math.trunc((data.query_summary.total_positive * 100) / data.query_summary.total_reviews);
 
-                let imgName = ratio >= 70 ? "positive"
-                    : ratio < 40 ? "negative" : "mixed";
+                const imgName = ratio >= 70 ? 'positive'
+                    : ratio < 40 ? 'negative' : 'mixed';
 
-                imgSrc = steamReviews.find(rev => rev.name === imgName).img;
+                const imgSrc = steamReviews.find(rev => rev.name === imgName).img;
 
                 this.DOM.reviews.title = `${ratio}% (${data.query_summary.total_positive.toLocaleString()})` +
                     ` positive reviews from ${data.query_summary.total_reviews.toLocaleString()}`;
 
                 if (!isFree && priceOverview && priceOverview.discount_percent > 0) {
-                    this.DOM.reviews.classList.add("flex-column");
+                    this.DOM.reviews.classList.add('flex-column');
                 }
 
-                let reviewLoading = this.DOM.reviews.querySelector(".loading");
-                reviewLoading.classList.add("hidden");
+                const reviewLoading = this.DOM.reviews.querySelector('.loading');
+                reviewLoading.classList.add('hidden');
 
-                let reviewImg = this.DOM.reviews.querySelector("img");
-                reviewImg.classList.remove("hidden");
+                const reviewImg = this.DOM.reviews.querySelector('img');
+                reviewImg.classList.remove('hidden');
                 reviewImg.src = imgSrc;
 
-                let reviewRatio = this.DOM.reviews.querySelector("span");
-                reviewRatio.classList.remove("hidden");
+                const reviewRatio = this.DOM.reviews.querySelector('span');
+                reviewRatio.classList.remove('hidden');
                 reviewRatio.textContent = ratio;
             });
     }
@@ -227,8 +227,8 @@ class TooltipElement {
             return;
         }
 
-        let slides = this.tip.props.content.querySelector(".glide__slides");
-        let bullets = this.tip.props.content.querySelector(".glide__bullets");
+        const slides = this.tip.props.content.querySelector('.glide__slides');
+        const bullets = this.tip.props.content.querySelector('.glide__bullets');
 
         for (let i = 0; i < this.screenshots.length; i++) {
             if (i === MAX_SCREENSHOTS) {
@@ -237,39 +237,39 @@ class TooltipElement {
 
             const screenshot = this.screenshots[i];
 
-            let slide = document.createElement("li");
-            slide.classList.add("glide__slide");
+            const slide = document.createElement('li');
+            slide.classList.add('glide__slide');
 
-            let carouselImg = document.createElement("div");
-            carouselImg.classList.add("carousel-img");
+            const carouselImg = document.createElement('div');
+            carouselImg.classList.add('carousel-img');
             carouselImg.style.backgroundImage = `url(${screenshot.path_thumbnail})`;
 
             slide.appendChild(carouselImg);
             slides.appendChild(slide);
 
-            let bullet = document.createElement("button");
-            bullet.classList.add("glide__bullet");
-            bullet.setAttribute("data-glide-dir", `=${(i + 1)}`);
+            const bullet = document.createElement('button');
+            bullet.classList.add('glide__bullet');
+            bullet.setAttribute('data-glide-dir', `=${(i + 1)}`);
             bullets.appendChild(bullet);
         }
 
-        new Glide(".glide", { autoplay: defaultSettings.autoplay }).mount();
+        new Glide('.glide', { autoplay: defaultSettings.autoplay }).mount();
 
         this.tip.state.isCarouselLoaded = true;
     }
 }
 
 function createLoadingWrapper() {
-    let loadingWrapper = document.createElement("div");
-    loadingWrapper.classList.add("loading-wrapper");
+    const loadingWrapper = document.createElement('div');
+    loadingWrapper.classList.add('loading-wrapper');
 
-    let loadingText = document.createElement("div");
-    loadingText.textContent = "Loading store details...";
-    loadingText.classList.add("inline");
+    const loadingText = document.createElement('div');
+    loadingText.textContent = 'Loading store details...';
+    loadingText.classList.add('inline');
 
-    let loading = document.createElement("div");
-    loading.classList.add("loading");
-    loading.classList.add("inline");
+    const loading = document.createElement('div');
+    loading.classList.add('loading');
+    loading.classList.add('inline');
 
     loadingWrapper.appendChild(loadingText);
     loadingWrapper.appendChild(loading);
@@ -290,10 +290,10 @@ function fetchContent(tip, html, steamImages) {
     tip.state.isLoading = true;
     tip.state.isCarouselLoaded = false;
 
-    let appId = /\/app\/(\d*)\?*/g.exec(tip.reference.href)[1];
+    const appId = /\/app\/(\d*)\?*/g.exec(tip.reference.href)[1];
 
     chrome.runtime.sendMessage({
-        contentScriptQuery: "queryAppUser",
+        contentScriptQuery: 'queryAppUser',
         appId: appId,
         language: defaultSettings.language,
         currency: defaultSettings.currency
@@ -303,15 +303,15 @@ function fetchContent(tip, html, steamImages) {
             let ttElement;
 
             if (data.app) {
-                let gameData = data.app[appId].data;
-                let userData = (data.user ? data.user[appId].success : false) ?
+                const gameData = data.app[appId].data;
+                const userData = (data.user ? data.user[appId].success : false) ?
                     data.user[appId].data : false;
 
                 ttElement = new TooltipElement(tip, html, gameData, userData, steamImages);
                 tip.ttElement = ttElement;
                 tipContent = ttElement.element;
             } else {
-                tipContent = "Error loading store data.";
+                tipContent = 'Error loading store data.';
             }
 
             tip.setContent(tipContent);
@@ -325,11 +325,11 @@ function fetchContent(tip, html, steamImages) {
 }
 
 function initTooltips(html, steamImages) {
-    let bodyEl = document.getElementsByTagName("body")[0];
+    const bodyEl = document.getElementsByTagName('body')[0];
 
     tippy(bodyEl, {
-        target: "[href*='store.steampowered.com/app']",
-        theme: "steam-stt",
+        target: '[href*="store.steampowered.com/app"]',
+        theme: 'steam-stt',
         interactive: true,
         maxWidth: 585,
         animateFill: false,
@@ -358,13 +358,13 @@ function bindOptionsMessage() {
 }
 
 function bindKeyEvents() {
-    window.addEventListener("keydown", evt => {
+    window.addEventListener('keydown', evt => {
         if (defaultSettings._keyDown !== evt.code) {
             defaultSettings._keyDown = evt.code;
         }
     });
 
-    window.addEventListener("keyup", evt => {
+    window.addEventListener('keyup', evt => {
         if (defaultSettings._keyDown === evt.code) {
             defaultSettings._keyDown = null;
         }
@@ -372,17 +372,17 @@ function bindKeyEvents() {
 }
 
 function logConsoleExtensionInfo() {
-    let greyColor = "color: grey;";
-    let blackBackground = "background: black;";
+    const greyColor = 'color: grey;';
+    const blackBackground = 'background: black;';
 
-    console.log("%c[%c%s %c%s %cby %c%s%c]",
+    console.log('%c[%c%s %c%s %cby %c%s%c]',
         greyColor + blackBackground,
-        "color: #1470a1;" + blackBackground,
+        'color: #1470a1;' + blackBackground,
         EXTENSION_INFO.name,
-        "color: white;" + blackBackground,
+        'color: white;' + blackBackground,
         EXTENSION_INFO.version,
         greyColor + blackBackground,
-        "color: orange;" + blackBackground,
+        'color: orange;' + blackBackground,
         EXTENSION_INFO.author,
         greyColor + blackBackground);
 }
