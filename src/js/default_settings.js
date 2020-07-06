@@ -5,6 +5,24 @@ const EXTENSION_INFO = {
     link: "https://github.com/gabrielmdu/Steam-Store-Tooltip"
 };
 
+const PLATFORMS_INFO = {
+    win: {
+        title: "Windows",
+        imgSrc: "https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_win.png?v=3"
+    },
+    mac: {
+        title: "Mac",
+        imgSrc: "https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_mac.png"
+    },
+    linux: {
+        title: "Linux",
+        imgSrc: "https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_linux.png"
+    }
+};
+
+const MAX_CATEGORIES = 7;
+const MAX_SCREENSHOTS = 6;
+
 let defaultSettings = {
     // chrome sync options
     autoplay: 3000,
