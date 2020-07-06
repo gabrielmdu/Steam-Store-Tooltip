@@ -16,14 +16,14 @@
     "tippy.js": "^4.3.5"
   },
   "devDependencies": {
-    "del": "^3.0.0",
+    "del": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
-    "gulp-google-webfonts": "^2.1.0",
+    "gulp-google-webfonts": "^4.0.0",
     "gulp-htmlmin": "^5.0.1",
-    "gulp-images-resizer": "0.0.5",
+    "gulp-images-resizer": "0.0.8",
     "gulp-jsonminify": "^1.1.0",
-    "gulp-rename": "^1.4.0",
+    "gulp-rename": "^2.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
     "gulp-svg2png": "^2.0.2",
