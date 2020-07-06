@@ -6,7 +6,7 @@ class TooltipElement {
         template.innerHTML = html.trim();
         this.element = template.content.firstChild;
 
-        this.screenshots = gameData.screenshots;
+        this.screenshots = gameData.screenshots || [];
 
         this.DOM = {
             name: this.element.querySelector(".steam-stt-theme .name"),
