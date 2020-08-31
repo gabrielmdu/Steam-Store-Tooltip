@@ -1,27 +1,112 @@
-$link-height: 30px;
+$font-family: Segoe Ui, Ubuntu, Tahoma, sans-serif;
 
+html,
 body {
-    background: #eaeaea;
+    padding: 0;
+    margin: 0;
+    min-height: 100%;
+    min-width: 100%;
+    height: 100%;
+    width: 100%;
 }
 
-#main {
-    background: #fff;
-    max-width: 650px;
-    height: 290px;
+.options {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-family: $font-family;
+    font-size: 16px;
+    background: #dadada;
+    color: #252525;
+}
 
-    #sli-value {
-        font-size: 0.9rem;
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin: 0 auto;
+    width: 600px;
+    background: white;
+    padding: 35px;
+
+    @media only screen and (max-width: 768px) {
+        width: 470px;
+    }
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    height: 2rem;
+    width: 95%;
+    margin: 8px 10px;
+}
+
+[class*="col-"] {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 2px 4px;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-2 {
+    width: 16.666666667%;
+}
+
+.footer {
+    width: 100%;
+    background: #004d6f;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+
+    a {
+        font-size: 12px;
+        color: white;
+        text-decoration: none;
+        line-height: 2em;
+    }
+}
+
+select {
+    height: 100%;
+    font-family: $font-family;
+    font-size: 14px;
+}
+
+button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    height: 29px;
+    background: transparent none;
+    border-width: 1px;
+    cursor: pointer;
+
+    &.clear {
+        color: #ce352c;
+        border-color: #ce352c;
     }
 
-    sup {
-        top: -0.3em;
-        font-size: 100%;
+    &.change {
+        color: #0366d6;
+        border-color: #0366d6;
     }
+}
 
-    #div-link {
-        height: $link-height;
-        line-height: $link-height;
-        background: #004d6f;
-        z-index: -1;
-    }
+kbd {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+    background: #5e4579;
+    border-radius: 4px;
+    padding: 3px;
+    color: white;
 }
