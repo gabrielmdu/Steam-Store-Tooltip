@@ -100,6 +100,30 @@ body {
     }
 }
 
+// adapted from https://www.w3schools.com/css/css_tooltip.asp
+.tooltip {
+    display: inline-block;
+    position: relative;
+
+    .tooltiptext {
+        display: none;
+        position: absolute;
+        background-color: #4da043;
+        color: #fbfbfb;
+        padding: 5px;
+        z-index: 5;
+        font-size: 12px;
+        top: -2em;
+        left: -12px;
+        box-shadow: 2px 2px 4px 0px #0000008a;
+        white-space: nowrap;
+    }
+}
+
+.tooltip:hover .tooltiptext {
+    display: inline-block;
+}
+
 .text-right {
     text-align: right;
 }
