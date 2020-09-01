@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<title>Steam Store Tooltip options</title>
-	<!--<link rel="stylesheet" href="/css/vendor-options.css">-->
+	<link rel="stylesheet" href="/css/vendor-options.css">
 	<link rel="stylesheet" href="/css/options.css">
 </head>
 
@@ -13,7 +13,10 @@
 		<div class="main">
 			<div class="row">
 				<div class="col-6">Autoplay thumbnails</div>
-				<div class="col-6">3</div>
+				<div class="col-5">
+					<div id="slider"></div>
+				</div>
+				<div id="slider-value" class="col-1 text-sm text-right"></div>
 			</div>
 			<div class="row">
 				<div class="col-6">Language</div>
@@ -29,9 +32,9 @@
 			</div>
 			<div class="row">
 				<div class="col-6">Activation key</div>
-				<div class="col-2"><kbd>ControlLeft</kbd></div>
-				<div class="col-2"><button class="change">Change</button></div>
-				<div class="col-2"><button class="clear">Clear</button></div>
+				<div id="key" class="col-2"></div>
+				<div class="col-2"><button id="btn-change">Change</button></div>
+				<div class="col-2"><button id="btn-clear">Clear</button></div>
 			</div>
 			<div class="footer">
 				<a id="sst-link" target="_blank">
@@ -41,7 +44,7 @@
 		</div>
 	</div>
 </body>
-<!--<script src="/js/vendor-options.js"></script>-->
+<script src="/js/vendor-options.js"></script>
 <script src="/js/default_settings.js"></script>
 <script src="/js/options.js"></script>
 

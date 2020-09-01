@@ -91,7 +91,7 @@ function vendorSstFontCompress() {
 
 function vendorOptionsJs() {
     return src([
-        'node_modules/metro4-dist/js/metro.min.js'
+        'node_modules/nouislider/distribute/nouislider.min.js'
     ])
         .pipe(terser({ output: { comments: false } }))
         .pipe(concat('vendor-options.js'))
@@ -100,7 +100,7 @@ function vendorOptionsJs() {
 
 function vendorOptionsCss() {
     return src([
-        'node_modules/metro4-dist/css/metro-all.min.css'
+        'node_modules/nouislider/distribute/nouislider.min.css'
     ])
         .pipe(concat('vendor-options.css'))
         .pipe(dest('dist/css/'));
@@ -119,6 +119,7 @@ function buildWatch() {
 }
 
 exports.build = parallel(css, html, js, series(rscSvg, rscResize), rscJson);
-exports.vendor = parallel(vendorSstJs, vendorSstCss, series(vendorSstFontCreate, vendorSstFontCompress), vendorOptionsJs, vendorOptionsCss);
+exports.vendor = parallel(vendorSstJs, vendorSstCss, series(vendorSstFontCreate,
+    vendorSstFontCompress), vendorOptionsJs, vendorOptionsCss);
 exports.clean = clean;
 exports.buildWatch = buildWatch;

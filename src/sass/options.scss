@@ -32,7 +32,7 @@ body {
     padding: 35px;
 
     @media only screen and (max-width: 768px) {
-        width: 470px;
+        width: 500px;
     }
 }
 
@@ -42,23 +42,31 @@ body {
     height: 2rem;
     width: 95%;
     margin: 8px 10px;
-}
-
-[class*="col-"] {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-    box-sizing: border-box;
-    padding: 2px 4px;
-}
-
-.col-6 {
-    width: 50%;
-}
-
-.col-2 {
-    width: 16.666666667%;
+    
+    [class*="col-"] {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+        box-sizing: border-box;
+        padding: 2px 4px;
+    }
+    
+    .col-6 {
+        width: 50%;
+    }
+    
+    .col-5 {
+        width: 41.666666667%;
+    }
+    
+    .col-2 {
+        width: 16.666666667%;
+    }
+    
+    .col-1 {
+        width: 8.333333333%;
+    }
 }
 
 .footer {
@@ -76,6 +84,14 @@ body {
     }
 }
 
+.text-right {
+    text-align: right;
+}
+
+.text-sm {
+    font-size: 11px;
+}
+
 select {
     height: 100%;
     font-family: $font-family;
@@ -90,12 +106,12 @@ button {
     border-width: 1px;
     cursor: pointer;
 
-    &.clear {
+    &#btn-clear {
         color: #ce352c;
         border-color: #ce352c;
     }
 
-    &.change {
+    &#btn-change {
         color: #0366d6;
         border-color: #0366d6;
     }
