@@ -105,7 +105,11 @@ body {
 }
 
 .text-sm {
-    font-size: 11px;
+    font-size: 13px;
+
+    @media only screen and (max-width: 768px) {
+        font-size: 11px;
+    }
 }
 
 .hidden {
@@ -145,4 +149,35 @@ kbd {
     border-radius: 4px;
     padding: 3px;
     color: white;
+}
+
+// noUiSlider hacks
+
+.noUi-horizontal {
+    height: 8px;
+
+    .noUi-handle {
+        width: 20px;
+        height: 20px;
+        right: -9px;
+        top: -7px;
+    }
+}
+
+.noUi-handle {
+    border-radius: 30px;
+    background: #0078ad;
+    box-shadow: none;
+
+    &:before {
+        display: none;
+    }
+
+    &:after {
+        display: none;
+    }
+}
+
+.noUi-target {
+    border-radius: 0;
 }
