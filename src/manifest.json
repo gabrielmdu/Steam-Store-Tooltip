@@ -3,11 +3,7 @@
     "version": "1.1.1",
     "description": "Show Steam games information when hovering the store links.",
     "homepage_url": "https://github.com/gabrielmdu/Steam-Store-Tooltip",
-    "permissions": [
-        "storage",
-        "declarativeContent",
-        "activeTab"
-    ],
+    "permissions": ["storage"],
     "background": {
         "scripts": [
             "js/background.js"
