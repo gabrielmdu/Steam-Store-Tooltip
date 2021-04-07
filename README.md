@@ -24,4 +24,4 @@ A Chrome extension that shows an informational tooltip when hovering a [Steam](h
 - Choose the store currency (_available if you're __not__ logged in on the browser_)
 - Activate the tooltip with a chosen key
 
-[![sst](https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_340x96.png)](https://chrome.google.com/webstore/detail/steam-store-tooltip/loekhehhklndobiamaakjkefleckboon)
+[![sst](https://storage.googleapis.com/chrome-gcs-uploader.appspot.com/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/iNEddTyWiMfLSwFD6qGq.png)](https://chrome.google.com/webstore/detail/steam-store-tooltip/loekhehhklndobiamaakjkefleckboon)
