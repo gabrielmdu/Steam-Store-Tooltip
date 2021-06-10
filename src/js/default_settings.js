@@ -1,11 +1,11 @@
-const EXTENSION_INFO = {
+export const EXTENSION_INFO = {
     name: 'Steam Store Tooltip',
     version: '1.1.1',
     author: 'gabrielmdu',
     link: 'https://github.com/gabrielmdu/Steam-Store-Tooltip'
 };
 
-const PLATFORMS_INFO = {
+export const PLATFORMS_INFO = {
     win: {
         title: 'Windows',
         imgSrc: 'https://steamstore-a.akamaihd.net/public/images/v6/icon_platform_win.png?v=3'
@@ -20,8 +20,8 @@ const PLATFORMS_INFO = {
     }
 };
 
-const MAX_CATEGORIES = 7;
-const MAX_SCREENSHOTS = 6;
+export const MAX_CATEGORIES = 7;
+export const MAX_SCREENSHOTS = 6;
 
 let defaultSettings = {
     // chrome sync options
@@ -33,17 +33,17 @@ let defaultSettings = {
     _keyDown: null
 };
 
-function fetchSetting(name) {
+export function fetchSetting(settings, settingName) {
     return new Promise((resolve, reject) => {
-        chrome.storage.sync.get({ [name]: defaultSettings[name] },
+        chrome.storage.sync.get({ [settingName]: defaultSettings[settingName] },
             result => !chrome.runtime.lastError ?
-                resolve(result[name]) :
+                resolve(result[settingName]) :
                 reject(`Error getting options: ${chrome.runtime.lastError}`)
         );
     });
 }
 
-function fetchAllSettings() {
+export function fetchAllSettings(settings) {
     return new Promise((resolve, reject) => {
         chrome.storage.sync.get(defaultSettings,
             result => !chrome.runtime.lastError ?

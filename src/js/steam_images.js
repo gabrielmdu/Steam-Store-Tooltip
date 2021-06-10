@@ -1,4 +1,4 @@
-const steamImages = {
+export const steamImages = {
     categories: [
         {
             id: 1,
@@ -159,4 +159,4 @@ const steamImages = {
             img: 'https://steamstore-a.akamaihd.net/public/images/v6/user_reviews_negative.png'
         }
     ]
-}
+};

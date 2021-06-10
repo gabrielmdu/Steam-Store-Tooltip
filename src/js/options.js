@@ -1,3 +1,10 @@
+import { EXTENSION_INFO, fetchSetting, fetchAllSettings } from './default_settings.js';
+
+import 'nouislider/distribute/nouislider.css';
+import '../sass/options.scss';
+
+import noUiSlider from 'nouislider';
+
 const languages = {
 	'schinese': '简体中文 (Simplified Chinese)',
 	'tchinese': '繁體中文 (Traditional Chinese)',
@@ -71,28 +78,30 @@ const currencies = {
 	'za': 'ZAR'
 };
 
+var settings = {};
+
 // functions
 
 async function loadOptions() {
 	try {
-		defaultSettings = await fetchAllSettings();
+		settings = await fetchAllSettings();
 
 		const slider = document.querySelector('#slider');
-		slider.noUiSlider.set(defaultSettings.autoplay / 1000);
+		slider.noUiSlider.set(settings.autoplay / 1000);
 
 		const selLanguage = document.querySelector('#sel-language');
-		selLanguage.value = defaultSettings.language === null
+		selLanguage.value = settings.language === null
 			? 'default'
-			: defaultSettings.language;
+			: settings.language;
 
 		const selCurrency = document.querySelector('#sel-currency');
-		selCurrency.value = defaultSettings.currency === null
+		selCurrency.value = settings.currency === null
 			? 'default'
-			: defaultSettings.currency;
+			: settings.currency;
 
 		const key = document.querySelector('#key');
-		key.innerHTML = defaultSettings.activationKey ?
-			'<kbd>' + defaultSettings.activationKey + '</kbd>' : '(none)';
+		key.innerHTML = settings.activationKey ?
+			'<kbd>' + settings.activationKey + '</kbd>' : '(none)';
 	} catch (error) {
 		console.error(`Failed loading options: ${error}`);
 	}
@@ -139,7 +148,7 @@ function bindSliderEvents() {
 	);
 
 	slider.noUiSlider.on('change', async value => {
-		let autoplay = await fetchSetting('autoplay');
+		let autoplay = await fetchSetting(settings, 'autoplay');
 
 		if (value == (autoplay / 1000)) {
 			return;

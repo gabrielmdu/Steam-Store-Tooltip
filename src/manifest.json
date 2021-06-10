@@ -18,16 +18,10 @@
             "*://store.steampowered.com/*"
         ],
         "css": [
-            "css/vendor-sst.css",
-            "font/fonts.css",
-            "css/steamstoretooltip.css"
+            "font/fonts.css"
         ],
         "js": [
-            "js/default_settings.js",
-            "js/sst_template.js",
-            "js/steam_images.js",
-            "js/steamstoretooltip.js",
-            "js/vendor-sst.js"
+            "js/steamstoretooltip.js"
         ],
         "run_at": "document_idle"
     }],

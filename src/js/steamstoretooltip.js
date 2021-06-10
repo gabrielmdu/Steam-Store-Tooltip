@@ -1,3 +1,14 @@
+import { steamImages } from './steam_images.js';
+import { sstTemplate } from './sst_template.js';
+import { EXTENSION_INFO, PLATFORMS_INFO, MAX_CATEGORIES, MAX_SCREENSHOTS, fetchAllSettings } from './default_settings.js';
+
+import '../sass/steamstoretooltip.scss';
+
+import tippy from 'tippy.js';
+import Glide from '@glidejs/glide';
+
+var settings = {};
+
 class TooltipElement {
     constructor(tip, html, gameData, userData, steamImages) {
         this.tip = tip;
@@ -184,7 +195,7 @@ class TooltipElement {
         chrome.runtime.sendMessage({
             contentScriptQuery: 'queryReviews',
             appId: appId,
-            language: defaultSettings.language,
+            language: settings.language,
             purchaseType: isFree ? 'all' : 'steam'
         },
             data => {
@@ -253,7 +264,7 @@ class TooltipElement {
             bullets.appendChild(bullet);
         }
 
-        new Glide('.glide', { autoplay: defaultSettings.autoplay }).mount();
+        new Glide('.glide', { autoplay: settings.autoplay }).mount();
 
         this.tip.state.isCarouselLoaded = true;
     }
@@ -295,8 +306,8 @@ function fetchContent(tip, html, steamImages) {
     chrome.runtime.sendMessage({
         contentScriptQuery: 'queryAppUser',
         appId: appId,
-        language: defaultSettings.language,
-        currency: defaultSettings.currency
+        language: settings.language,
+        currency: settings.currency
     },
         data => {
             let tipContent;
@@ -335,8 +346,8 @@ function initTooltips(html, steamImages) {
         animateFill: false,
         ignoreAttributes: true,
         onShow: tip => {
-            if (!defaultSettings.activationKey ||
-                (defaultSettings.activationKey && defaultSettings.activationKey === defaultSettings._keyDown)) {
+            if (!settings.activationKey ||
+                (settings.activationKey && settings.activationKey === settings._keyDown)) {
                 fetchContent(tip, html, steamImages);
             } else {
                 return false;
@@ -353,20 +364,20 @@ function initTooltips(html, steamImages) {
 function bindOptionsMessage() {
     chrome.runtime.onMessage.addListener(
         message => {
-            defaultSettings = { ...defaultSettings, ...message };
+            settings = { ...settings, ...message };
         });
 }
 
 function bindKeyEvents() {
     window.addEventListener('keydown', evt => {
-        if (defaultSettings._keyDown !== evt.code) {
-            defaultSettings._keyDown = evt.code;
+        if (settings._keyDown !== evt.code) {
+            settings._keyDown = evt.code;
         }
     });
 
     window.addEventListener('keyup', evt => {
-        if (defaultSettings._keyDown === evt.code) {
-            defaultSettings._keyDown = null;
+        if (settings._keyDown === evt.code) {
+            settings._keyDown = null;
         }
     });
 }
@@ -389,7 +400,7 @@ function logConsoleExtensionInfo() {
 
 async function main() {
     try {
-        defaultSettings = await fetchAllSettings();
+        settings = await fetchAllSettings();
 
         bindOptionsMessage();
         bindKeyEvents();
