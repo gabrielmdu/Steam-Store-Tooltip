@@ -3,10 +3,12 @@ const JsonMinimizerPlugin = require('json-minimizer-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlMinimizerPlugin = require('html-minimizer-webpack-plugin');
-const RemovePlugin = require('remove-files-webpack-plugin');
+const GoogleFontsPlugin = require('@beyonk/google-fonts-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
+const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 
 module.exports = {
-    //mode: 'production',
+    mode: 'production',
     entry: {
         background: './src/js/background.js',
         options: './src/js/options.js',
@@ -71,6 +73,36 @@ module.exports = {
         ]
     },
     plugins: [
+        new GoogleFontsPlugin({
+            fonts: [
+                {
+                    family: 'Cabin',
+                    subsets: [
+                        'latin-ext',
+                        'vietnamese'
+                    ],
+                    display: 'auto'
+                },
+                {
+                    family: 'Raleway',
+                    variants: ['500'],
+                    subsets: ['latin-ext'],
+                    display: 'auto'
+                }
+            ],
+            filename: 'fonts.css',
+            noLocalInCss: true,
+            formats: ['woff']
+        }),
+        new ReplaceInFileWebpackPlugin([{
+            dir: 'dist/font',
+            files: ['fonts.css'],
+            rules: [
+                {
+                    search: /\.\/font/g,
+                    replace: 'chrome-extension://__MSG_@@extension_id__/font'
+                }]
+        }]),
         new CopyPlugin({
             patterns: [
                 {
@@ -81,14 +113,20 @@ module.exports = {
                     context: path.resolve(__dirname, './src/html'),
                     from: '*.html',
                     to: './html'
-                },
+                }
             ],
         }),
-        new RemovePlugin({
-            after: {
-                include: [
-                    './dist/js/icon.js'
-                ]
+        new FileManagerPlugin({
+            events: {
+                onEnd: {
+                    move: [
+                        {
+                            source: './dist/fonts.css',
+                            destination: './dist/font/fonts.css'
+                        },
+                    ],
+                    delete: ['./dist/js/icon.js']
+                }
             }
         })
     ],
