@@ -9,8 +9,9 @@
   "bugs": "https://github.com/gabrielmdu/Steam-Store-Tooltip/issues",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode production",
-    "watch": "webpack --watch"
+    "start": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "watch": "webpack --config webpack.dev.js --watch"
   },
   "dependencies": {
     "@glidejs/glide": "^3.3.0",
@@ -34,6 +35,7 @@
     "style-loader": "^3.2.1",
     "svg-to-png-loader": "^4.0.0",
     "webpack": "^5.45.1",
-    "webpack-cli": "^4.7.2"
+    "webpack-cli": "^4.7.2",
+    "webpack-merge": "^5.8.0"
   }
 }

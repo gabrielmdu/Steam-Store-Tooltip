@@ -1,14 +1,11 @@
 const path = require('path');
-const JsonMinimizerPlugin = require('json-minimizer-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const HtmlMinimizerPlugin = require('html-minimizer-webpack-plugin');
 const GoogleFontsPlugin = require('@beyonk/google-fonts-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 
 module.exports = {
-    mode: 'production',
+    mode: 'none',
     entry: {
         background: './src/js/background.js',
         options: './src/js/options.js',
@@ -19,10 +16,6 @@ module.exports = {
         filename: 'js/[name].js',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
-    },
-    //devtool: 'inline-source-map',
-    devServer: {
-        contentBase: './dist',
     },
     module: {
         rules: [
@@ -129,16 +122,5 @@ module.exports = {
                 }
             }
         })
-    ],
-    optimization: {
-        minimizer: [
-            new TerserPlugin({ extractComments: false }),
-            new JsonMinimizerPlugin(),
-            new HtmlMinimizerPlugin({
-                minimizerOptions: {
-                    collapseWhitespace: true
-                }
-            }),
-        ],
-    }
+    ]
 };
