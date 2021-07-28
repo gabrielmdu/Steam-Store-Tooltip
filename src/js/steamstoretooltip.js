@@ -8,6 +8,12 @@ import tippy from 'tippy.js';
 import Glide from '@glidejs/glide';
 
 var settings = {};
+/** 
+ * Unique array of app data fetched from the Steam API. Not unique only if the user hovers the mouse 
+ * too quickly between multiple links with the same app id, which doesn't give enough time for the
+ * fetching response
+ */
+var appDatas = [];
 
 class TooltipElement {
     constructor(tip, html, gameData, userData, steamImages) {
@@ -303,42 +309,57 @@ function fetchContent(tip, html, steamImages) {
 
     const appId = /\/app\/(\d*)\?*/g.exec(tip.reference.href)[1];
 
-    chrome.runtime.sendMessage({
-        contentScriptQuery: 'queryAppUser',
-        appId: appId,
-        language: settings.language,
-        currency: settings.currency
-    },
-        data => {
-            let tipContent;
-            let ttElement;
+    const existantData = appDatas.filter(d => d.app[appId])[0];
+    // if the app data already exists, sets it as the new tip content
+    if (existantData) {
+        setTipAppData(existantData, appId, tip, html, steamImages);
+    } else {
+        // makes a request to the Steam API to retrieve the app's data
+        chrome.runtime.sendMessage({
+            contentScriptQuery: 'queryAppUser',
+            appId: appId,
+            language: settings.language,
+            currency: settings.currency
+        },
+            data => {
+                if (data.app) {
+                    // adds the app data to the general list
+                    appDatas = [...appDatas, data];
+                }
 
-            if (data.app) {
-                const gameData = data.app[appId].data;
-                const userData = (data.user ? data.user[appId].success : false) ?
-                    data.user[appId].data : false;
+                setTipAppData(data, appId, tip, html, steamImages);
+            });
+    }
+}
 
-                ttElement = new TooltipElement(tip, html, gameData, userData, steamImages);
-                tip.ttElement = ttElement;
-                tipContent = ttElement.element;
-            } else {
-                tipContent = 'Error loading store data.';
-            }
+/** Sets the tip content according to the fetched data from the Steam API  */
+function setTipAppData(data, appId, tip, html, steamImages) {
+    let tipContent;
+    let ttElement;
 
-            tip.setContent(tipContent);
-            tip.state.isLoading = false;
-            tip.state.isLoaded = true;
+    if (data.app) {
+        const gameData = data.app[appId].data;
+        const userData = (data.user ? data.user[appId].success : false) ?
+            data.user[appId].data : false;
 
-            if (ttElement) {
-                ttElement.setCarouselContent();
-            }
-        });
+        ttElement = new TooltipElement(tip, html, gameData, userData, steamImages);
+        tip.ttElement = ttElement;
+        tipContent = ttElement.element;
+    } else {
+        tipContent = 'Error loading store data.';
+    }
+
+    tip.setContent(tipContent);
+    tip.state.isLoading = false;
+    tip.state.isLoaded = true;
+
+    if (ttElement) {
+        ttElement.setCarouselContent();
+    }
 }
 
 function initTooltips(html, steamImages) {
-    const bodyEl = document.getElementsByTagName('body')[0];
-
-    tippy(bodyEl, {
+    tippy(document.body, {
         target: '[href*="store.steampowered.com/app"]',
         theme: 'steam-stt',
         interactive: true,
