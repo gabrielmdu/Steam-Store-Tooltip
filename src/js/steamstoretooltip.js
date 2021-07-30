@@ -1,6 +1,7 @@
 import { steamImages } from './steam_images.js';
 import { sstTemplate } from './sst_template.js';
 import { EXTENSION_INFO, PLATFORMS_INFO, MAX_CATEGORIES, MAX_SCREENSHOTS, fetchAllSettings } from './default_settings.js';
+import { backgroundQueries } from './background.js';
 
 import '../sass/steamstoretooltip.scss';
 
@@ -58,6 +59,7 @@ class TooltipElement {
         this.setUserDataContent(userData);
         this.setCategoriesContent(steamImages.categories, gameData.categories);
         this.setReviewsDataContent(steamImages.reviews, gameData.steam_appid, gameData.is_free, gameData.price_overview);
+        this.setTagsContent(gameData.steam_appid);
     }
 
     setAdditionalContent(releaseDate, genres, platforms) {
@@ -199,7 +201,7 @@ class TooltipElement {
 
     setReviewsDataContent(steamReviews, appId, isFree, priceOverview) {
         chrome.runtime.sendMessage({
-            contentScriptQuery: 'queryReviews',
+            contentScriptQuery: backgroundQueries.REVIEWS,
             appId: appId,
             language: settings.language,
             purchaseType: isFree ? 'all' : 'steam'
@@ -234,6 +236,19 @@ class TooltipElement {
                 const reviewRatio = this.DOM.reviews.querySelector('span');
                 reviewRatio.classList.remove('hidden');
                 reviewRatio.textContent = ratio;
+            });
+    }
+
+    setTagsContent(appId) {
+        chrome.runtime.sendMessage({
+            contentScriptQuery: backgroundQueries.TAGS,
+            appId: appId,
+        },
+            data => {
+                console.log(data);
+                // sorts the tags by most votes - https://stackoverflow.com/a/16794116
+                const sortedTags = Object.keys(data).sort((a, b) => data[b] - data[a]);
+                console.log(sortedTags);
             });
     }
 
@@ -316,7 +331,7 @@ function fetchContent(tip, html, steamImages) {
     } else {
         // makes a request to the Steam API to retrieve the app's data
         chrome.runtime.sendMessage({
-            contentScriptQuery: 'queryAppUser',
+            contentScriptQuery: backgroundQueries.APP_USER,
             appId: appId,
             language: settings.language,
             currency: settings.currency

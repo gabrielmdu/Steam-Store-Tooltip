@@ -1,3 +1,9 @@
+export const backgroundQueries = {
+    APP_USER: 'queryAppUser',
+    REVIEWS: 'queryReviews',
+    TAGS: 'queryTags'
+};
+
 async function requestAppAndUserInfo(appId, language, currency) {
     const dataInfo = {
         app: null,
@@ -36,21 +42,50 @@ async function requestReviewsInfo(appId, language, purchaseType) {
     return reviewsInfo;
 }
 
+/** Requests app info from Steam Spy API, then gets its tags list */
+async function requestTagsInfo(appId) {
+    let tagsInfo = null;
+
+    try {
+        const resultInfo = await fetch(`https://steamspy.com/api.php?request=appdetails&appid=${appId}`);
+
+        const info = await resultInfo.json();
+        if (typeof info.tags !== 'object') {
+            throw new TypeError('Tags not found');
+        }
+
+        tagsInfo = info.tags;
+    } catch (e) {
+        console.error(e);
+    }
+
+    return tagsInfo;
+}
+
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
         const appId = encodeURIComponent(request.appId);
         const language = encodeURIComponent(request.language);
 
-        if (request.contentScriptQuery == 'queryAppUser') {
-            const currency = encodeURIComponent(request.currency);
+        switch (request.contentScriptQuery) {
+            case backgroundQueries.APP_USER:
+                const currency = encodeURIComponent(request.currency);
 
-            requestAppAndUserInfo(appId, language, currency)
-                .then(dataInfo => sendResponse(dataInfo));
-        } else if (request.contentScriptQuery == 'queryReviews') {
-            const purchaseType = encodeURIComponent(request.purchaseType);
+                requestAppAndUserInfo(appId, language, currency)
+                    .then(dataInfo => sendResponse(dataInfo));
+                break;
 
-            requestReviewsInfo(appId, language, purchaseType)
-                .then(dataInfo => sendResponse(dataInfo));
+            case backgroundQueries.REVIEWS:
+                const purchaseType = encodeURIComponent(request.purchaseType);
+
+                requestReviewsInfo(appId, language, purchaseType)
+                    .then(dataInfo => sendResponse(dataInfo));
+                break;
+
+            case backgroundQueries.TAGS:
+                requestTagsInfo(appId)
+                    .then(dataInfo => sendResponse(dataInfo));
+                break;
         }
 
         return true;
