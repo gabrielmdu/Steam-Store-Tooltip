@@ -1,6 +1,6 @@
 import { steamImages } from './steam_images.js';
 import { sstTemplate } from './sst_template.js';
-import { EXTENSION_INFO, PLATFORMS_INFO, MAX_CATEGORIES, MAX_SCREENSHOTS, fetchAllSettings } from './default_settings.js';
+import { EXTENSION_INFO, PLATFORMS_INFO, MAX_CATEGORIES, MAX_SCREENSHOTS, MAX_TAGS, fetchAllSettings } from './default_settings.js';
 import { backgroundQueries } from './background.js';
 
 import '../sass/steamstoretooltip.scss';
@@ -42,7 +42,8 @@ class TooltipElement {
             metacritic: this.element.querySelector(`${sstTheme} .metacritic`),
             userData: this.element.querySelector(`${sstTheme} .user-data`),
             categories: this.element.querySelector(`${sstTheme} .categories`),
-            reviews: this.element.querySelector(`${sstTheme} .reviews`)
+            reviews: this.element.querySelector(`${sstTheme} .reviews`),
+            tags: this.element.querySelector(`${sstTheme} .tags`)
         };
 
         this.setElementContents(gameData, userData, steamImages);
@@ -239,16 +240,31 @@ class TooltipElement {
             });
     }
 
+    /** Fills up the tags */
     setTagsContent(appId) {
         chrome.runtime.sendMessage({
             contentScriptQuery: backgroundQueries.TAGS,
             appId: appId,
         },
             data => {
-                console.log(data);
-                // sorts the tags by most votes - https://stackoverflow.com/a/16794116
-                const sortedTags = Object.keys(data).sort((a, b) => data[b] - data[a]);
-                console.log(sortedTags);
+                if (!data) {
+                    return;
+                }
+
+                // sorts the tags by most votes - adapted from https://stackoverflow.com/a/16794116
+                const tags = Object.keys(data).sort((a, b) => data[b] - data[a]);
+                for (let i = 0; i < tags.length; i++) {
+                    if (i === MAX_TAGS) {
+                        break;
+                    }
+
+                    const tagEl = document.createElement('span');
+                    tagEl.classList.add('tag');
+                    tagEl.classList.add('inline');
+                    tagEl.textContent = tags[i];
+
+                    this.DOM.tags.appendChild(tagEl);
+                }
             });
     }
 

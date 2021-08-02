@@ -22,6 +22,7 @@ export const PLATFORMS_INFO = {
 
 export const MAX_CATEGORIES = 7;
 export const MAX_SCREENSHOTS = 6;
+export const MAX_TAGS = 4;
 
 let defaultSettings = {
     // chrome sync options

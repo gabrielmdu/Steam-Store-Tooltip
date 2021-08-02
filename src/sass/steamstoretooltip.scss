@@ -150,6 +150,19 @@ $genres-side-border: 1px solid #9c9c9c;
         }
     }
 
+    .tags {
+        margin-bottom: 0.3rem;
+
+        .tag {
+            padding: 0.1rem 0.2rem;
+            border-radius: 0.3rem;
+            background: #473f73;
+            font-size: 0.7rem;
+            margin-right: 0.2rem;
+            color: #b383ff;
+        }
+    }
+
     .price-reviews-wrapper {
         display: flex;
         flex-direction: row;

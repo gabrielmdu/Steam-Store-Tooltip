@@ -22,11 +22,14 @@ export const sstTemplate = `<div class="steam-stt-theme">
 
         <div class="top-right">
             <div class="name"></div>
+
             <div class="additional-info">
                 <div class="release-date"></div>
                 <div class="genres"></div>
                 <div class="platforms"></div>
             </div>
+
+            <div class="tags"></div>
 
             <div class="price-reviews-wrapper">
                 <div class="price"></div>
