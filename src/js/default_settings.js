@@ -1,7 +1,7 @@
 export const EXTENSION_INFO = {
     name: 'Steam Store Tooltip',
-    version: '1.1.1',
-    author: 'gabrielmdu',
+    version: '1.2.0',
+    author: 'Gabriel Schulte',
     link: 'https://github.com/gabrielmdu/Steam-Store-Tooltip'
 };
 

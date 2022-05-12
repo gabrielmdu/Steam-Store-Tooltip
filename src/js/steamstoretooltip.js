@@ -1,7 +1,7 @@
 import { steamImages } from './steam_images.js';
 import { sstTemplate } from './sst_template.js';
 import { EXTENSION_INFO, PLATFORMS_INFO, MAX_CATEGORIES, MAX_SCREENSHOTS, MAX_TAGS, fetchAllSettings } from './default_settings.js';
-import { backgroundQueries } from './background.js';
+import { backgroundQueries } from './../background.js';
 
 import '../sass/steamstoretooltip.scss';
 

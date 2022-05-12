@@ -7,7 +7,7 @@ const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 module.exports = {
     mode: 'none',
     entry: {
-        background: './src/js/background.js',
+        "../background": './src/background.js',
         options: './src/js/options.js',
         steamstoretooltip: './src/js/steamstoretooltip.js',
         icon: './src/js/icon.js'
