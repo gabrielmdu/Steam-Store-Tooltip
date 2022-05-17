@@ -1,6 +1,6 @@
 import { steamImages } from './steam_images.js';
 import { sstTemplate } from './sst_template.js';
-import { EXTENSION_INFO, PLATFORMS_INFO, MAX_CATEGORIES, MAX_SCREENSHOTS, MAX_TAGS, fetchAllSettings } from './default_settings.js';
+import { PLATFORMS_INFO, MAX_CATEGORIES, MAX_SCREENSHOTS, MAX_TAGS, fetchAllSettings } from './default_settings.js';
 import { backgroundQueries } from './../background.js';
 
 import '../sass/steamstoretooltip.scss';
@@ -415,9 +415,12 @@ function initTooltips(html, steamImages) {
 
 function bindOptionsMessage() {
     chrome.runtime.onMessage.addListener(
-        message => {
-            settings = { ...settings, ...message };
-        });
+        request => {
+            if (request.contentScriptQuery === backgroundQueries.UPDATE_SETTINGS) {
+                settings = { ...settings, ...request.settings };
+            }
+        }
+    );
 }
 
 function bindKeyEvents() {
@@ -432,22 +435,6 @@ function bindKeyEvents() {
             settings._keyDown = null;
         }
     });
-}
-
-function logConsoleExtensionInfo() {
-    const greyColor = 'color: grey;';
-    const blackBackground = 'background: black;';
-
-    console.log('%c[%c%s %c%s %cby %c%s%c]',
-        greyColor + blackBackground,
-        'color: #1470a1;' + blackBackground,
-        EXTENSION_INFO.name,
-        'color: white;' + blackBackground,
-        EXTENSION_INFO.version,
-        greyColor + blackBackground,
-        'color: orange;' + blackBackground,
-        EXTENSION_INFO.author,
-        greyColor + blackBackground);
 }
 
 async function main() {

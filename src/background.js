@@ -1,7 +1,8 @@
 export const backgroundQueries = {
     APP_USER: 'queryAppUser',
     REVIEWS: 'queryReviews',
-    TAGS: 'queryTags'
+    TAGS: 'queryTags',
+    UPDATE_SETTINGS: 'updateSettings'
 };
 
 async function requestAppAndUserInfo(appId, language, currency) {
@@ -86,6 +87,9 @@ chrome.runtime.onMessage.addListener(
                 requestTagsInfo(appId)
                     .then(dataInfo => sendResponse(dataInfo));
                 break;
+
+            default:
+                sendResponse();
         }
 
         return true;

@@ -4,6 +4,7 @@ import 'nouislider/distribute/nouislider.css';
 import '../sass/options.scss';
 
 import noUiSlider from 'nouislider';
+import { backgroundQueries } from '../background.js';
 
 const languages = {
 	'schinese': '简体中文 (Simplified Chinese)',
@@ -195,9 +196,12 @@ function upKeyEvent(event) {
 }
 
 function sendOptionMessage(option) {
-	chrome.tabs.query({}, tabs => {
+	chrome.tabs.query({ active: false, url: '*://*/*' }, tabs => {
 		tabs.forEach(tab => {
-			chrome.tabs.sendMessage(tab.id, option);
+			chrome.tabs.sendMessage(tab.id, {
+				contentScriptQuery: backgroundQueries.UPDATE_SETTINGS,
+				settings: option
+			});
 		});
 	});
 }
