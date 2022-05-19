@@ -6,6 +6,8 @@
 
 A Chrome extension that shows an informational tooltip when hovering a [Steam](https://store.steampowered.com) store link
 
+https://user-images.githubusercontent.com/4662954/169218360-a2ee190d-4c16-456b-965c-1525d86654c5.mp4
+
 ## Features
 - Quickly see all the relevant game's info in a tooltip:
   - price and discount
