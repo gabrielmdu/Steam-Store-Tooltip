@@ -1,5 +1,11 @@
 # Roadmap
 
+## 1.2.0
+
+| Feature | Done |
+| :-- | :--: |
+| Show user tags | ✔ |
+
 ## 1.1.0
 
 | Feature | Done |
