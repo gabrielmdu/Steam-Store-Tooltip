@@ -1,6 +1,6 @@
 import { EXTENSION_INFO, fetchSetting, fetchAllSettings } from './default_settings.js';
 
-import 'nouislider/distribute/nouislider.css';
+import 'nouislider/dist/nouislider.css';
 import '../sass/options.scss';
 
 import noUiSlider from 'nouislider';
