@@ -5,7 +5,7 @@ import { backgroundQueries } from './../background.js';
 
 import '../sass/steamstoretooltip.scss';
 
-import tippy from 'tippy.js';
+import tippy, { delegate } from 'tippy.js';
 import Glide from '@glidejs/glide';
 
 var settings = {};
@@ -194,7 +194,7 @@ class TooltipElement {
         tippy(catEllipsisEl, {
             content: catListEl,
             delay: 0,
-            theme: 'steam-stt-categories',
+            arrow: false,
             theme: 'steam-sst-categories',
             ignoreAttributes: true,
         });
@@ -390,13 +390,14 @@ function setTipAppData(data, appId, tip, html, steamImages) {
 }
 
 function initTooltips(html, steamImages) {
-    tippy(document.body, {
+    delegate(document.body, {
         target: '[href*="store.steampowered.com/app"]',
         theme: 'steam-sst',
         interactive: true,
         maxWidth: 585,
-        animateFill: false,
+        arrow: false,
         ignoreAttributes: true,
+        appendTo: document.body,
         onShow: tip => {
             if (!settings.activationKey ||
                 (settings.activationKey && settings.activationKey === settings._keyDown)) {
