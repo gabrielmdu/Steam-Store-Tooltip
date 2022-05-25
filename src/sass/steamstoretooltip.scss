@@ -1,5 +1,7 @@
 // glide
 @import "carousel.scss";
+// tippy
+@import "tippy.js/dist/tippy.css";
 
 $shadow-color: #ffffff42;
 $slimy-green: #c0ff00;
@@ -19,6 +21,11 @@ $genres-side-border: 1px solid #9c9c9c;
     background: linear-gradient(to bottom, #15324b 0%, #09121a 100%);
     border-radius: 0 !important;
     box-shadow: 2px 2px 8px 1px black;
+    white-space: initial;
+
+    .tippy-content {
+        padding: 6px 6px;
+    }
 
     .steam-sst-top {
         display: flex;
@@ -295,6 +302,10 @@ $genres-side-border: 1px solid #9c9c9c;
     background: #131c27;
     border-radius: 0 !important;
     box-shadow: 2px 2px 8px 1px black;
+
+    .tippy-content {
+        padding: 6px 6px;
+    }
 
     .steam-sst-categories-list {
         .steam-sst-categories-list-item {
