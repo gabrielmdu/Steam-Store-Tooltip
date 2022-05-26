@@ -368,7 +368,7 @@ function setTipAppData(data, appId, tip, html, steamImages) {
     let tipContent;
     let ttElement;
 
-    if (data.app) {
+    if (data.app && data.app[appId].success) {
         const gameData = data.app[appId].data;
         const userData = (data.user ? data.user[appId].success : false) ?
             data.user[appId].data : false;
