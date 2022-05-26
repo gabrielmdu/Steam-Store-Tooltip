@@ -194,6 +194,7 @@ class TooltipElement {
         tippy(catEllipsisEl, {
             content: catListEl,
             delay: 0,
+            allowHTML: true,
             arrow: false,
             theme: 'steam-sst-categories',
             ignoreAttributes: true,
@@ -393,6 +394,7 @@ function initTooltips(html, steamImages) {
     delegate(document.body, {
         target: '[href*="store.steampowered.com/app"]',
         theme: 'steam-sst',
+        allowHTML: true,
         interactive: true,
         maxWidth: 585,
         arrow: false,
