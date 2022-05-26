@@ -14,7 +14,7 @@ $steam-thumbnail-width: 600px;
 $steam-thumbnail-height: 337px;
 $genres-side-border: 1px solid #9c9c9c;
 
-.tippy-tooltip.steam-sst-theme {
+.tippy-box[data-theme~='steam-sst'] {
     text-align: left;
     font: 14px Cabin, sans-serif;
     color: $whity;
@@ -295,7 +295,7 @@ $genres-side-border: 1px solid #9c9c9c;
     }
 }
 
-.tippy-tooltip.steam-sst-categories-theme {
+.tippy-box[data-theme~='steam-sst-categories'] {
     text-align: left;
     font: 14px Cabin, sans-serif;
     color: $whity;
