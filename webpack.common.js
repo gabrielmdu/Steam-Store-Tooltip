@@ -82,6 +82,7 @@ module.exports = {
                     display: 'auto'
                 }
             ],
+            apiUrl: 'https://gwfh.mranftl.com/api/fonts',
             filename: 'fonts.css',
             noLocalInCss: true,
             formats: ['woff']
