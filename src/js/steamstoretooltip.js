@@ -8,6 +8,7 @@ import '../sass/steamstoretooltip.scss';
 import tippy, { delegate } from 'tippy.js';
 import Glide from '@glidejs/glide';
 
+var tippyInstance;
 var settings = {};
 /** 
  * Unique array of app data fetched from the Steam API. Not unique only if the user hovers the mouse 
@@ -390,8 +391,8 @@ function setTipAppData(data, appId, tip, html, steamImages) {
     }
 }
 
-function initTooltips(html, steamImages) {
-    delegate(document.body, {
+function initTooltips() {
+    tippyInstance = delegate(document.body, {
         target: '[href*="store.steampowered.com/app"]',
         theme: 'steam-sst',
         allowHTML: true,
@@ -403,7 +404,7 @@ function initTooltips(html, steamImages) {
         onShow: tip => {
             if (!settings.activationKey ||
                 (settings.activationKey && settings.activationKey === settings._keyDown)) {
-                fetchContent(tip, html, steamImages);
+                fetchContent(tip, sstTemplate, steamImages);
             } else {
                 return false;
             }
@@ -420,7 +421,9 @@ function bindOptionsMessage() {
     chrome.runtime.onMessage.addListener(
         request => {
             if (request.contentScriptQuery === backgroundQueries.UPDATE_SETTINGS) {
+                // replaces the current settings with the changed ones from the options page and resets the tooltips
                 settings = { ...settings, ...request.settings };
+                resetTooltips();
             }
         }
     );
@@ -440,13 +443,23 @@ function bindKeyEvents() {
     });
 }
 
+function resetTooltips() {
+    if (tippyInstance) {
+        tippyInstance.destroy();
+    }
+
+    appDatas = [];
+
+    initTooltips();
+}
+
 async function main() {
     try {
         settings = await fetchAllSettings();
 
         bindOptionsMessage();
         bindKeyEvents();
-        initTooltips(sstTemplate, steamImages);
+        initTooltips();
     } catch (error) {
         console.error(`Failed to initiate extension: ${error}`);
     }
