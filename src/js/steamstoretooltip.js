@@ -202,44 +202,51 @@ class TooltipElement {
         });
     }
 
-    setReviewsDataContent(steamReviews, appId, isFree, priceOverview) {
-        chrome.runtime.sendMessage({
-            contentScriptQuery: backgroundQueries.REVIEWS,
-            appId: appId,
-            language: settings.language,
-            purchaseType: isFree ? 'all' : 'steam'
-        },
-            data => {
-                if (data.query_summary.total_reviews === 0) {
-                    this.DOM.reviews.remove();
-                    return;
-                }
+    async setReviewsDataContent(steamReviews, appId, isFree, priceOverview) {
+        let reviewsData;
 
-                const ratio = Math.trunc((data.query_summary.total_positive * 100) / data.query_summary.total_reviews);
-
-                const imgName = ratio >= 70 ? 'positive'
-                    : ratio < 40 ? 'negative' : 'mixed';
-
-                const imgSrc = steamReviews.find(rev => rev.name === imgName).img;
-
-                this.DOM.reviews.title = `${ratio}% (${data.query_summary.total_positive.toLocaleString()})` +
-                    ` positive reviews from ${data.query_summary.total_reviews.toLocaleString()}`;
-
-                if (!isFree && priceOverview && priceOverview.discount_percent > 0) {
-                    this.DOM.reviews.classList.add('steam-sst-flex-column');
-                }
-
-                const reviewLoading = this.DOM.reviews.querySelector('.steam-sst-loading');
-                reviewLoading.classList.add('steam-sst-hidden');
-
-                const reviewImg = this.DOM.reviews.querySelector('img');
-                reviewImg.classList.remove('steam-sst-hidden');
-                reviewImg.src = imgSrc;
-
-                const reviewRatio = this.DOM.reviews.querySelector('span');
-                reviewRatio.classList.remove('steam-sst-hidden');
-                reviewRatio.textContent = ratio;
+        if (appDatas[appId].reviews) {
+            reviewsData = appDatas[appId].reviews;
+        } else {
+            reviewsData = await chrome.runtime.sendMessage({
+                contentScriptQuery: backgroundQueries.REVIEWS,
+                appId: appId,
+                language: settings.language,
+                purchaseType: isFree ? 'all' : 'steam'
             });
+
+            appDatas[appId].reviews = reviewsData;
+        }
+
+        if (reviewsData.query_summary.total_reviews === 0) {
+            this.DOM.reviews.remove();
+            return;
+        }
+
+        const ratio = Math.trunc((reviewsData.query_summary.total_positive * 100) / reviewsData.query_summary.total_reviews);
+
+        const imgName = ratio >= 70 ? 'positive'
+            : ratio < 40 ? 'negative' : 'mixed';
+
+        const imgSrc = steamReviews.find(rev => rev.name === imgName).img;
+
+        this.DOM.reviews.title = `${ratio}% (${reviewsData.query_summary.total_positive.toLocaleString()})` +
+            ` positive reviews from ${reviewsData.query_summary.total_reviews.toLocaleString()}`;
+
+        if (!isFree && priceOverview && priceOverview.discount_percent > 0) {
+            this.DOM.reviews.classList.add('steam-sst-flex-column');
+        }
+
+        const reviewLoading = this.DOM.reviews.querySelector('.steam-sst-loading');
+        reviewLoading.classList.add('steam-sst-hidden');
+
+        const reviewImg = this.DOM.reviews.querySelector('img');
+        reviewImg.classList.remove('steam-sst-hidden');
+        reviewImg.src = imgSrc;
+
+        const reviewRatio = this.DOM.reviews.querySelector('span');
+        reviewRatio.classList.remove('steam-sst-hidden');
+        reviewRatio.textContent = ratio;
     }
 
     /** Fills up the tags */
@@ -327,7 +334,7 @@ function createLoadingWrapper() {
     return loadingWrapper;
 }
 
-function fetchContent(tip, html, steamImages) {
+async function fetchContent(tip, html, steamImages) {
     if ((tip.state.isLoading || tip.state.isLoaded) &&
         tip.originalHref === tip.reference.href) {
         return;
@@ -342,27 +349,24 @@ function fetchContent(tip, html, steamImages) {
 
     const appId = /\/app\/(\d*)\?*/g.exec(tip.reference.href)[1];
 
-    const existantData = appDatas.filter(d => d.app[appId])[0];
+    let appData = appDatas[appId];
     // if the app data already exists, sets it as the new tip content
-    if (existantData) {
-        setTipAppData(existantData, appId, tip, html, steamImages);
-    } else {
+    if (!appData) {
         // makes a request to the Steam API to retrieve the app's data
-        chrome.runtime.sendMessage({
+        appData = await chrome.runtime.sendMessage({
             contentScriptQuery: backgroundQueries.APP_USER,
             appId: appId,
             language: settings.language,
             currency: settings.currency
-        },
-            data => {
-                if (data.app) {
-                    // adds the app data to the general list
-                    appDatas = [...appDatas, data];
-                }
+        });
 
-                setTipAppData(data, appId, tip, html, steamImages);
-            });
+        if (appData.app) {
+            // adds the app data to the general list
+            appDatas[appId] = appData;
+        }
     }
+
+    setTipAppData(appData, appId, tip, html, steamImages);
 }
 
 /** Sets the tip content according to the fetched data from the Steam API  */
