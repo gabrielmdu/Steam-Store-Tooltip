@@ -17,35 +17,57 @@ var settings = {};
  */
 var appDatas = [];
 
-class TooltipElement {
-    constructor(tip, html, gameData, userData, steamImages) {
+class Tooltip {
+    constructor(tip, html, elementNames) {
         this.tip = tip;
 
         const template = document.createElement('template');
         template.innerHTML = html.trim();
         this.element = template.content.firstChild;
 
-        this.screenshots = gameData.screenshots || [];
+        this.setupDOM(elementNames)
+    }
 
+    setupDOM(elementNames) {
         const sstTheme = '.steam-sst-theme';
-        this.DOM = {
-            name: this.element.querySelector(`${sstTheme} .steam-sst-name`),
-            releaseDate: this.element.querySelector(`${sstTheme} .steam-sst-release-date`),
-            genres: this.element.querySelector(`${sstTheme} .steam-sst-genres`),
-            platforms: this.element.querySelector(`${sstTheme} .steam-sst-platforms`),
-            headerImg: this.element.querySelector(`${sstTheme} .steam-sst-header-img`),
-            description: this.element.querySelector(`${sstTheme} .steam-sst-description`),
-            price: this.element.querySelector(`${sstTheme} .steam-sst-price`),
-            priceWrapper: this.element.querySelector(`${sstTheme} .steam-sst-price-wrapper`),
-            initialPrice: this.element.querySelector(`${sstTheme} .steam-sst-initial-price`),
-            finalPrice: this.element.querySelector(`${sstTheme} .steam-sst-final-price`),
-            percent: this.element.querySelector(`${sstTheme} .steam-sst-percent`),
-            metacritic: this.element.querySelector(`${sstTheme} .steam-sst-metacritic`),
-            userData: this.element.querySelector(`${sstTheme} .steam-sst-user-data`),
-            categories: this.element.querySelector(`${sstTheme} .steam-sst-categories`),
-            reviews: this.element.querySelector(`${sstTheme} .steam-sst-reviews`),
-            tags: this.element.querySelector(`${sstTheme} .steam-sst-tags`)
-        };
+
+        this.DOM = {};
+
+        elementNames.forEach(en => {
+            const nameKebabCase = en
+                .replace(/([a-z])([A-Z])/g, '$1-$2')
+                .replace(/\s+/g, '-')
+                .toLowerCase();
+
+            this.DOM[en] = this.element.querySelector(`${sstTheme} .steam-sst-${nameKebabCase}`)
+        });
+    }
+}
+
+class TooltipFull extends Tooltip {
+    constructor(tip, html, gameData, userData, steamImages) {
+        const DOMElementNames = [
+            'name',
+            'releaseDate',
+            'genres',
+            'platforms',
+            'headerImg',
+            'description',
+            'price',
+            'priceWrapper',
+            'initialPrice',
+            'finalPrice',
+            'percent',
+            'metacritic',
+            'userData',
+            'categories',
+            'reviews',
+            'tags'
+        ];
+
+        super(tip, html, DOMElementNames);
+
+        this.screenshots = gameData.screenshots || [];
 
         this.setElementContents(gameData, userData, steamImages);
     }
@@ -398,7 +420,7 @@ function setTipAppData(data, appId, tip, html, steamImages) {
         const userData = (data.user ? data.user[appId].success : false) ?
             data.user[appId].data : false;
 
-        ttElement = new TooltipElement(tip, html, gameData, userData, steamImages);
+        ttElement = new TooltipFull(tip, html, gameData, userData, steamImages);
         tip.ttElement = ttElement;
         tipContent = ttElement.element;
     } else {
