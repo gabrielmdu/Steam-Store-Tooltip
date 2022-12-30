@@ -202,7 +202,7 @@ class TooltipElement {
         });
     }
 
-    async setReviewsDataContent(steamReviews, appId, isFree, priceOverview) {
+    async fetchReviewsData(appId, isFree) {
         let reviewsData;
 
         if (appDatas[appId].reviews) {
@@ -217,6 +217,12 @@ class TooltipElement {
 
             appDatas[appId].reviews = reviewsData;
         }
+
+        return reviewsData;
+    }
+
+    async setReviewsDataContent(steamReviews, appId, isFree, priceOverview) {
+        const reviewsData = await this.fetchReviewsData(appId, isFree);
 
         if (reviewsData.query_summary.total_reviews === 0) {
             this.DOM.reviews.remove();
@@ -249,8 +255,7 @@ class TooltipElement {
         reviewRatio.textContent = ratio;
     }
 
-    /** Fills up the tags */
-    async setTagsContent(appId) {
+    async fetchTagsData(appId) {
         let tagsData;
 
         if (appDatas[appId].tags) {
@@ -263,6 +268,13 @@ class TooltipElement {
 
             appDatas[appId].tags = tagsData;
         }
+
+        return tagsData;
+    }
+
+    /** Fills up the tags */
+    async setTagsContent(appId) {
+        let tagsData = await this.fetchTagsData(appId);
 
         if (!tagsData) {
             return;
