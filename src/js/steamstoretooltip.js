@@ -250,31 +250,38 @@ class TooltipElement {
     }
 
     /** Fills up the tags */
-    setTagsContent(appId) {
-        chrome.runtime.sendMessage({
-            contentScriptQuery: backgroundQueries.TAGS,
-            appId: appId,
-        },
-            data => {
-                if (!data) {
-                    return;
-                }
+    async setTagsContent(appId) {
+        let tagsData;
 
-                // sorts the tags by most votes - adapted from https://stackoverflow.com/a/16794116
-                const tags = Object.keys(data).sort((a, b) => data[b] - data[a]);
-                for (let i = 0; i < tags.length; i++) {
-                    if (i === MAX_TAGS) {
-                        break;
-                    }
-
-                    const tagEl = document.createElement('span');
-                    tagEl.classList.add('steam-sst-tag');
-                    tagEl.classList.add('steam-sst-inline');
-                    tagEl.textContent = tags[i];
-
-                    this.DOM.tags.appendChild(tagEl);
-                }
+        if (appDatas[appId].tags) {
+            tagsData = appDatas[appId].tags;
+        } else {
+            tagsData = await chrome.runtime.sendMessage({
+                contentScriptQuery: backgroundQueries.TAGS,
+                appId: appId,
             });
+
+            appDatas[appId].tags = tagsData;
+        }
+
+        if (!tagsData) {
+            return;
+        }
+
+        // sorts the tags by most votes - adapted from https://stackoverflow.com/a/16794116
+        const tags = Object.keys(tagsData).sort((a, b) => tagsData[b] - tagsData[a]);
+        for (let i = 0; i < tags.length; i++) {
+            if (i === MAX_TAGS) {
+                break;
+            }
+
+            const tagEl = document.createElement('span');
+            tagEl.classList.add('steam-sst-tag');
+            tagEl.classList.add('steam-sst-inline');
+            tagEl.textContent = tags[i];
+
+            this.DOM.tags.appendChild(tagEl);
+        }
     }
 
     setCarouselContent() {
