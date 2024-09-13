@@ -329,7 +329,10 @@ class TooltipElement {
             bullets.appendChild(bullet);
         }
 
-        new Glide('.glide', { autoplay: settings.autoplay }).mount();
+        new Glide('.glide', { 
+            autoplay: settings.autoplay,
+            dragThreshold: false
+        }).mount();
 
         this.tip.state.isCarouselLoaded = true;
     }

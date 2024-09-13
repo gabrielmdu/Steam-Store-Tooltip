@@ -19,3 +19,20 @@
 .glide__bullet {
     border-color: #474747;
 }
+
+.glide__arrow {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 1px 0;
+}
+
+.glide__arrow--left {
+    left: 0.3em;
+}
+
+.glide__arrow--right {
+    right: 0.3em;
+}
+
+.glide--swipeable {
+    cursor: default;
+}
