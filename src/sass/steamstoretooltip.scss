@@ -61,23 +61,26 @@ $genres-side-border: 1px solid #9c9c9c;
             bottom: 0;
             right: 0;
             font: 15px bold Arial, Helvetica, sans-serif;
-            color: #fff;
+            font-weight: 700;
             height: 1.9em;
             width: 1.9em;
             text-align: center;
             line-height: 1.9em;
-            border-radius: 6px;
+            border-radius: 2px;
 
             &.steam-sst-positive {
-                background: #6c3;
+                background: #00ce7a;
+                color: #262626
             }
 
             &.steam-sst-mixed {
-                background: #fc3;
+                background: #ffbd3f;
+                color: #262626
             }
 
             &.steam-sst-negative {
-                background: #f00;
+                background: #ff6874;
+                color: #fff
             }
 
             a {
