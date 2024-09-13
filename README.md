@@ -29,4 +29,8 @@ This extension depends on two external APIs:
 - Steam Store ([unofficial documentation](https://wiki.teamfortress.com/wiki/User:RJackson/StorefrontAPI)): for all info on games except for user tags. If this API stops working, the extension won't work
 - [Steam Spy](https://steamspy.com/api.php): for user tags info
 
+## Acknowledgments
+
+- Arrow icons by [Reshot](https://www.reshot.com/)
+
 [![sst](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/iNEddTyWiMfLSwFD6qGq.png)](https://chrome.google.com/webstore/detail/steam-store-tooltip/loekhehhklndobiamaakjkefleckboon)
