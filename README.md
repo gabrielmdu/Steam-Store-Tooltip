@@ -19,6 +19,7 @@ https://user-images.githubusercontent.com/4662954/169218360-a2ee190d-4c16-456b-9
   - release date
   - platforms
   - user tags
+  - Metacritic score
 - Choose the store language
 - Choose the store currency (_available if you're __not__ logged in on the browser_)
 - Activate the tooltip with a chosen key
@@ -31,6 +32,8 @@ This extension depends on two external APIs:
 
 ## Acknowledgments
 
+- Tooltip functionality by [Tippy.js](https://atomiks.github.io/tippyjs/)
+- Images carousel by [Glide.js](https://glidejs.com/)
 - Arrow icons by [Reshot](https://www.reshot.com/)
 
 [![sst](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/iNEddTyWiMfLSwFD6qGq.png)](https://chrome.google.com/webstore/detail/steam-store-tooltip/loekhehhklndobiamaakjkefleckboon)
